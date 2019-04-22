@@ -1,0 +1,33 @@
+<%= stylesheet_link_tag "pc/events" %>
+
+<div class="events_page">
+  <h2>東京ドームにおける巨人戦の情報</h2>
+
+  <h3>会場の最寄駅</h3>
+  <ul class="local_stations">
+    <% @stations.each do |station| %>
+      <li>
+        <div class="name"><%= station.name %></div>
+        <ul class="connected_lines">
+          <% station.line_stations.each do |line| %>
+            <li><%= line.line_name %></li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+
+  <h3>結果一覧</h3>
+  <ul class="events">
+    <% @events.each do |event| %>
+      <li>
+        <div class="data date"><%= event.date %></div>
+        <div class="data name"><%= event.name %></div>
+        <div class="data start"><%= "#{event.start_time.hour}時#{event.start_time.min}分" %></div>
+        <div class="data end"><%= "#{event.end_time.hour}時#{event.end_time.min}分" %></div>
+        <div class="data audience"><%= event.audience %>人</div>
+        <div class="data result"><%= event.result %></div>
+      </li>
+    <% end %>
+  </ul>
+</div>
