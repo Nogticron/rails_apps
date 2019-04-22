@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_21_180340) do
+ActiveRecord::Schema.define(version: 2019_04_22_191145) do
 
   create_table "event_stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "event_id"
@@ -50,6 +50,16 @@ ActiveRecord::Schema.define(version: 2019_04_21_180340) do
   create_table "teams", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
     t.integer "home", null: false
+  end
+
+  create_table "weathers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.date "date", null: false
+    t.float "max_temp", null: false
+    t.float "min_temp", null: false
+    t.string "weather_9", null: false
+    t.string "weather_12", null: false
+    t.string "weather_15", null: false
+    t.string "amount", null: false
   end
 
 end
