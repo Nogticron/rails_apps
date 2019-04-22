@@ -1,0 +1,15 @@
+<%= stylesheet_link_tag "pc/top" %>
+
+<div class="top_index">
+  <% @lines.each do |line| %>
+    <ul>
+      <h3><%= line.name %></h3>
+      <% line.stations.all.each do |station| %>
+        <li>
+          <div class="name"><%= station.name %></div>
+          <div class="number"><%= LineStation.find_by(station: station, line: line).number %></div>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
