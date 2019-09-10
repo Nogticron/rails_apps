@@ -3,6 +3,7 @@ require 'csv'
 class CsvImport
   def self.get
     # https://opendata-web.site/station/13/eki/
+    puts '23区内の駅を取得します'
     CSV.read('app/imports/csv_roseneki_13.csv', headers: true).each do |row|
       unless Station.exists?(name: row['station_name'])
         station = Station.new(name: row['station_name'])
@@ -23,5 +24,6 @@ class CsvImport
         line_station.save!
       end
     end
+    puts '23区内の駅を取得完了しました'
   end
 end
