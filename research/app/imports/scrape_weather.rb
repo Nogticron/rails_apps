@@ -3,6 +3,7 @@ class ScrapeWeather
   @agent = Mechanize.new
 
   def self.get
+    puts '巨人戦の約10年分のデータを取得します'
     (Date.parse('2000-01-01')..Date.parse('2000-12-31')).each do |date|
       month =
         if date.month < 10
