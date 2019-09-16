@@ -12,22 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2019_04_22_191145) do
 
-  create_table "event_stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "event_id"
-    t.bigint "station_id"
-    t.index ["event_id"], name: "index_event_stations_on_event_id"
-    t.index ["station_id"], name: "index_event_stations_on_station_id"
-  end
-
-  create_table "events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name", null: false
-    t.date "date", null: false
-    t.time "start_time", null: false
-    t.time "end_time", null: false
-    t.integer "audience", null: false
-    t.string "result", null: false
-  end
-
   create_table "line_stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "line_id"
     t.bigint "station_id"
@@ -45,11 +29,8 @@ ActiveRecord::Schema.define(version: 2019_04_22_191145) do
 
   create_table "stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
-  end
-
-  create_table "teams", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name", null: false
-    t.integer "home", null: false
+    t.string "lon", null: false
+    t.string "lat", null: false
   end
 
   create_table "weathers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
