@@ -7,6 +7,8 @@ class CsvImport
     CSV.read('app/imports/csv_roseneki_13.csv', headers: true).each do |row|
       unless Station.exists?(name: row['station_name'])
         station = Station.new(name: row['station_name'])
+        station.lon = row['station_lon']
+        station.lat = row['station_lat']
         station.save!
       else
         station = Station.find_by!(name: row['station_name'])

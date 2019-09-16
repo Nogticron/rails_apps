@@ -3,9 +3,57 @@ require 'csv'
 class MakeCsv
   @data_list = []
 
-  def self.make_area
-    read_txt_area
-    output_to_csv_area
+  def self.create_station_link
+    # data = []
+    # CSV.read('app/imports/csv_roseneki_13.csv', headers: true).each do |row|
+    #   data << row
+    # end
+
+    # CSV.open('app/data_h17/roseneki_network.csv','w', headers: true) do |row|
+    #   row << ["pref_code", "pref_name", "station_code" ,"station_name", "station_yomi",
+    #      "station_note", "station_lat","station_lon","line_code","line_name","order",
+    #      "company_code","c.company_name", "station_id"]
+    #   data.each do |datum|
+    #     station_id = Station.find_by(name: datum['station_name']).id
+    #     datum << station_id
+    #     row << datum
+    #   end
+    # end
+
+
+    links = []
+    Line.all.each do |line|
+      LineStation.where(line_id: line.id).each do |row|
+        next_link = LineStation.find_by(id: row.id + 1, line_id: line.id)
+        if next_link
+          next_station = Station.find(next_link.station_id)
+        else
+          next_station = nil
+        end
+
+        # puts "#{line.name} #{row.station_name} #{row.station_id} -> #{next_station.id if next_station}"
+
+        if next_station
+          link = [row.station_id, next_station.id]
+          links << link
+        end
+
+      end
+    end
+
+    #　辺のリストを書き出し
+    CSV.open('app/data_h17/station_links.csv','w', headers: false) do |row|
+      links.each do |link|
+        row << link
+      end
+    end
+
+    # 座標を書き出し
+    CSV.open('app/data_h17/station_pos.csv','w', headers: false) do |row|
+      Station.all.each do |station|
+        row << [station.lat.to_f * 1000000, station.lon.to_f * 1000000, station.id]
+      end
+    end
   end
 
   def self.make_sensos
