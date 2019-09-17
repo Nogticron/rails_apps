@@ -1,5 +1,5 @@
-class CsvImport
-  def self.get_station
+class Railway::CsvImport
+  def self.get
     # https://opendata-web.site/station/13/eki/
     puts '23区内の駅を取得します'
     CSV.read('app/imports/railway/csv_roseneki.csv', headers: true).each do |row|
