@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_22_191145) do
+ActiveRecord::Schema.define(version: 2019_09_17_162330) do
+
+  create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "area_code", null: false
+    t.integer "day_population", null: false
+    t.integer "resident_population", null: false
+    t.float "day_night_ratio", null: false
+    t.float "area", null: false
+    t.float "day_density", null: false
+    t.float "resident_density", null: false
+    t.boolean "tour_spot", default: false, null: false
+  end
 
   create_table "line_stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "line_id"
