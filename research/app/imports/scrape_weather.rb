@@ -20,7 +20,7 @@ class ScrapeWeather
         end
 
       url = 'https://weather.goo.ne.jp/past/662/0000' + month + day
-      
+
       page = @agent.get(url)
 
       days = page.search('table.temppast tr')
@@ -52,7 +52,7 @@ class ScrapeWeather
           else
             we_15 = row[5].inner_text
           end
-          
+
           amount = row[6].inner_text
 
           weather = Weather.new
