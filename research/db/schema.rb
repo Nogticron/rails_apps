@@ -47,20 +47,24 @@ ActiveRecord::Schema.define(version: 2019_09_17_162330) do
   end
 
   create_table "stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "city_id"
     t.string "name", null: false
     t.string "lon", null: false
     t.string "lat", null: false
+    t.index ["city_id"], name: "index_stations_on_city_id"
   end
 
   create_table "weathers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "area_id"
     t.date "date", null: false
-    t.float "max_temp", null: false
-    t.float "min_temp", null: false
-    t.string "weather_9", null: false
-    t.string "weather_12", null: false
-    t.string "weather_15", null: false
-    t.string "amount", null: false
+    t.time "time", null: false
+    t.float "temperture"
+    t.integer "temp_quality"
+    t.float "precipitation"
+    t.boolean "is_occurrence"
+    t.integer "precip_quality"
+    t.integer "weather_state"
+    t.integer "weather_quality"
     t.index ["area_id"], name: "index_weathers_on_area_id"
   end
 

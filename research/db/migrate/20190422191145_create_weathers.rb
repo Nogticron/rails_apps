@@ -4,12 +4,14 @@ class CreateWeathers < ActiveRecord::Migration[5.2]
 
       t.references :area, add_foreign_key: true
       t.date :date, null: false
-      t.float :max_temp, null: false
-      t.float :min_temp, null: false
-      t.string :weather_9, null: false
-      t.string :weather_12, null: false
-      t.string :weather_15, null: false
-      t.string :amount, null: false
+      t.time :time, null: false
+      t.float :temperture
+      t.integer :temp_quality
+      t.float :precipitation
+      t.boolean :is_occurrence
+      t.integer :precip_quality
+      t.integer :weather_state
+      t.integer :weather_quality
     end
   end
 end

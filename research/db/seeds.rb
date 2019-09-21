@@ -13,8 +13,8 @@ areas.each do |area|
 
 	Area.create(name: area[0], e_name: area[1])
 end
-puts '地域を作成しました'
+puts 'エリアを作成しました'
 
 Railway::CsvImport.get
-
+Weather::ImportWeatherData.get
 ImportCityData.get
