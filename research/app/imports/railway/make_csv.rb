@@ -1,4 +1,4 @@
-class MakeCsv
+class Railway::MakeCsv
   @data_list = []
 
   def self.create_station_link

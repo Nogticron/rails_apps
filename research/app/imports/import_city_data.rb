@@ -1,7 +1,6 @@
 class ImportCityData
 
 	def self.get
-		puts '東京都のデータを取得します'
 		CSV.read('app/imports/city_data.csv', headers: true).each do |row|
 			next if row['地域'] == '東京都総数' || row['地域'] == '区部'
 			next if City.find_by(name: row['地域'])
