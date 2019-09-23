@@ -2,8 +2,9 @@ class ImportCityData
 
 	def self.get
 		CSV.read('app/imports/city_data.csv', headers: true).each do |row|
-			next if row['地域'] == '東京都総数' || row['地域'] == '区部'
+			next if row['地域'] == '東京都総数' || row['地域'] == '区部' || row['地域'] == '市部' || row['地域'] == '郡部'
 			next if City.find_by(name: row['地域'])
+			break if row['地域'] == '島部'
 
 			city = City.new
 			city.name = row['地域']

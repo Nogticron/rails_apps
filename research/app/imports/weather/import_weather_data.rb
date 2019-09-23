@@ -4,11 +4,11 @@ class Weather::ImportWeatherData
   def self.get
     read('tokyo')
     read('edogawa')
-    read('hachioji')
     read('haneda')
     read('nerima')
     read('setagaya')
     read('fuchu')
+    read('hachioji')
   end
 
   # [品質情報]　8: データ欠損なし
