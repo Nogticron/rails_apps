@@ -28,7 +28,13 @@ class Railway::ScrapeStationCity
         station = Station.find_by(name: station_name)
         city = City.find_by(name: city_name)
 
-        station.update(city_id: city.id)
+        begin
+          station.update(city_id: city.id)
+        rescue => exception
+          p station_name
+          next
+        end
+
       end
     end
   end
@@ -39,6 +45,8 @@ class Railway::ScrapeStationCity
       '国際展示場正門'
     when '東京国際クルーズターミナル'
       '船の科学館'
+    when '南町田グランベリーパーク'
+      '南町田'
     else
       name
     end
