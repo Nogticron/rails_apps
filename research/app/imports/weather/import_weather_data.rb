@@ -46,7 +46,7 @@ class Weather::ImportWeatherData
     CSV.read("app/imports/weather/weather_#{area_name}.csv", headers: true).each do |row|
       date = Date.strptime(row['年月日'], '%Y/%m/%d')
       time = Time.strptime(row['時間'], '%H:%M:00')
-      next if Weather.find_by(date: row['年月日'], time: row['時間'])
+      next if area.weather.find_by(date: date, time: time)
 
       weather = area.weather.new
       weather.date = date
