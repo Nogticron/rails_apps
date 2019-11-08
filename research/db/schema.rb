@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 2019_10_09_164755) do
     t.bigint "station_id"
     t.string "line_name"
     t.string "station_name"
+    t.string "home_lat"
+    t.string "home_lon"
     t.integer "number"
     t.index ["line_id"], name: "index_line_stations_on_line_id"
     t.index ["station_id"], name: "index_line_stations_on_station_id"
