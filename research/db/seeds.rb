@@ -12,6 +12,7 @@ Railway::CsvImport.get
 ImportCityData.get
 Railway::ScrapeStationCity.get
 CreateAreaCity.create_area_city_relation
+Railway::ScrapeStationRank.get
 
-Railway::ReadSensos.read
-Railway::ReadSensos.set_between_time
+# Railway::ReadSensos.read
+# Railway::ReadSensos.set_between_time
