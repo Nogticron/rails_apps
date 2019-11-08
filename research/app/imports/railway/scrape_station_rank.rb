@@ -2,6 +2,8 @@ class Railway::ScrapeStationRank
   JR_TOP_URL = 'https://www.jreast.co.jp/passenger/index.html'
   JR_OTHER_URL = 'https://www.jreast.co.jp/passenger/2018_0X.html'
   TOEI_URL = 'https://www.kotsu.metro.tokyo.jp/subway/kanren/passengers.html'
+  METRO_URL = 'https://www.tokyometro.jp/corporate/enterprise/passenger_rail/transportation/passengers/index.html'
+
   @agent = Mechanize.new
 
   def self.return_rank(num)
@@ -31,6 +33,9 @@ class Railway::ScrapeStationRank
   def self.get
     puts '都営線の規模データを取得します' #2018年度
     get_toei_data
+
+    puts '東京メトロの駅の規模データを取得します' #2018年度
+    get_metro_data
 
     puts 'JRの駅の規模データを取得します' #2018年
     get_jr_data(JR_TOP_URL)
@@ -101,5 +106,39 @@ class Railway::ScrapeStationRank
         end
       end
     end
+  end
+
+  def self.get_metro_data
+    page = @agent.get(METRO_URL)
+
+    data = page.search('table.dataTable tr')
+    data.each_with_index do |row, i|
+      next if i == 0 || i == 40
+      break if i == 132
+
+      list = row.search('td')
+      if list
+        name = list[2].inner_text if list[2]
+        case name
+        when '国会議事堂前・溜池山王'
+          name = '国会議事堂前'
+        when '明治神宮前〈原宿〉'
+          name = '明治神宮前'
+        when '二重橋前〈丸の内〉'
+          name = '二重橋前'
+        end
+
+        station_rank = return_rank(list[3].inner_text.sub(%r{,}, '').to_i)
+        station = Station.find_by(name: name)
+        if station
+          station.update(rank: station_rank)
+        end
+      end
+    end
+
+    # 追加修正
+    station = Station.find_by(name: '溜池山王')
+    rank = Station.find_by(name: '国会議事堂前').rank
+    station.update(rank: rank)
   end
 end
