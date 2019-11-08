@@ -6,6 +6,7 @@ class Railway::ScrapeStationRank
   KEIO_URL = 'https://www.keio.co.jp/group/traffic/railroading/passengers/index.html'
   ODAKYU_URL = 'https://www.odakyu.jp/company/railroad/users/'
   TOKYU_URL = 'https://www.tokyu.co.jp/railway/data/passengers/'
+  TOBU_URL = 'http://www.tobu.co.jp/corporation/rail/station_info/'
 
   @agent = Mechanize.new
 
@@ -37,17 +38,23 @@ class Railway::ScrapeStationRank
     # puts '都営線の駅の規模データを取得します' #2018年度
     # get_toei_data
 
-    # puts '東京メトロの駅の規模データを取得します' #2018年度
-    # get_metro_data
-
-    # puts '京王線の駅の規模データを取得します'
+    # puts '京王線の駅の規模データを取得します' #2018年度
     # get_keio_data
 
-    # puts '小田急線の駅の規模データを取得します'
+    # puts '小田急線の駅の規模データを取得します' #2018年度
     # get_odakyu_data
 
-    puts '東急線の駅の規模データを取得します'
-    get_tokyu_data
+    # puts '東急線の駅の規模データを取得します' #2018年度
+    # get_tokyu_data
+
+    # puts '東武線の駅の規模データを取得します' #2018年度
+    # get_tobu_data
+
+    puts '西武線の駅の規模データを取得します' #2018年度
+    get_seibu_data
+
+    # puts '東京メトロの駅の規模データを取得します' #2018年度
+    # get_metro_data
 
     # puts 'JRの駅の規模データを取得します' #2018年
     # get_jr_data(JR_TOP_URL)
@@ -212,6 +219,46 @@ class Railway::ScrapeStationRank
           rank = return_rank(list[2].inner_text.sub(%r{,}, '').to_i)
           station.update(rank: rank)
         end
+      end
+    end
+  end
+
+  def self.get_tobu_data
+    page = @agent.get(TOBU_URL)
+
+    tables = page.search('table.table0101')
+    skips = [3, 4, 5, 6, 7, 8, 9, 11]
+    tables.each_with_index do |table, j|
+      next if skips.include?(j)
+
+      data = table.search('tr')
+      data.each_with_index do |row, i|
+        next if i <= 1
+
+        list = row.search('td')
+        name = row.at('th').inner_text.sub(%r{ヶ}, 'ケ')
+        case name
+        when 'とうきょうスカイツリー（旧・業平橋）'
+          name = 'とうきょうスカイツリー'
+        when '押上（スカイツリー前）'
+          name = '押上'
+        end
+
+        station = Station.find_by(name: name)
+        if station
+          rank = return_rank(list[1].inner_text.sub(%r{,}, '').to_i)
+          station.update(rank: rank)
+        end
+      end
+    end
+  end
+
+  def self.get_seibu_data
+    CSV.read('app/imports/railway/data/seibu_line.csv', headers: true).each do |row|
+      station = Station.find_by(name: row['name'])
+      if station
+        rank = return_rank(row['passengers'].to_i)
+        station.update(rank: rank)
       end
     end
   end
