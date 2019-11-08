@@ -3,6 +3,9 @@ class Railway::ScrapeStationRank
   JR_OTHER_URL = 'https://www.jreast.co.jp/passenger/2018_0X.html'
   TOEI_URL = 'https://www.kotsu.metro.tokyo.jp/subway/kanren/passengers.html'
   METRO_URL = 'https://www.tokyometro.jp/corporate/enterprise/passenger_rail/transportation/passengers/index.html'
+  KEIO_URL = 'https://www.keio.co.jp/group/traffic/railroading/passengers/index.html'
+  ODAKYU_URL = 'https://www.odakyu.jp/company/railroad/users/'
+  TOKYU_URL = 'https://www.tokyu.co.jp/railway/data/passengers/'
 
   @agent = Mechanize.new
 
@@ -31,18 +34,27 @@ class Railway::ScrapeStationRank
   end
 
   def self.get
-    puts '都営線の規模データを取得します' #2018年度
-    get_toei_data
+    # puts '都営線の駅の規模データを取得します' #2018年度
+    # get_toei_data
 
-    puts '東京メトロの駅の規模データを取得します' #2018年度
-    get_metro_data
+    # puts '東京メトロの駅の規模データを取得します' #2018年度
+    # get_metro_data
 
-    puts 'JRの駅の規模データを取得します' #2018年
-    get_jr_data(JR_TOP_URL)
-    1.upto(9) do |i|
-      url = JR_OTHER_URL.sub(%r{X}, i.to_s)
-      get_jr_data(url)
-    end
+    # puts '京王線の駅の規模データを取得します'
+    # get_keio_data
+
+    # puts '小田急線の駅の規模データを取得します'
+    # get_odakyu_data
+
+    puts '東急線の駅の規模データを取得します'
+    get_tokyu_data
+
+    # puts 'JRの駅の規模データを取得します' #2018年
+    # get_jr_data(JR_TOP_URL)
+    # 1.upto(9) do |i|
+    #   url = JR_OTHER_URL.sub(%r{X}, i.to_s)
+    #   get_jr_data(url)
+    # end
   end
 
   def self.get_jr_data(url)
@@ -140,5 +152,67 @@ class Railway::ScrapeStationRank
     station = Station.find_by(name: '溜池山王')
     rank = Station.find_by(name: '国会議事堂前').rank
     station.update(rank: rank)
+  end
+
+  def self.get_keio_data
+    page = @agent.get(KEIO_URL)
+
+    tables = page.search('table.tbl01')
+    tables.each do |table|
+      data = table.search('tr')
+
+      data.each_with_index do |row, i|
+        next if i == 0
+
+        list = row.search('td')
+        station = Station.find_by(name: list[0].inner_text.sub(%r{ヶ}, 'ケ'))
+        if station
+          rank = return_rank(list[1].inner_text.sub(%r{,}, '').to_i)
+          station.update(rank: rank)
+        end
+      end
+    end
+  end
+
+  def self.get_odakyu_data
+    page = @agent.get(ODAKYU_URL)
+
+    tables = page.search('table.table')
+    tables.each do |table|
+      data = table.search('tr')
+
+      data.each_with_index do |row, i|
+        next if i == 0
+
+        list = row.search('td')
+        name = row.at('th').inner_text.sub(%r{ヶ}, 'ケ')
+        station = Station.find_by(name: name)
+        if station
+          rank = return_rank(list[0].inner_text.sub(%r{,}, '').to_i)
+          station.update(rank: rank)
+        end
+      end
+    end
+  end
+
+  def self.get_tokyu_data
+    page = @agent.get(TOKYU_URL)
+
+    tables = page.search('table.mod-table')
+    tables.each do |table|
+      data = table.search('tr')
+
+      data.each_with_index do |row, i|
+        next if i == 0
+
+        list = row.search('td')
+        name = row.at('th').inner_text.sub(%r{ヶ}, 'ケ')
+        station = Station.find_by(name: name)
+        if station
+          rank = return_rank(list[2].inner_text.sub(%r{,}, '').to_i)
+          station.update(rank: rank)
+        end
+      end
+    end
   end
 end
