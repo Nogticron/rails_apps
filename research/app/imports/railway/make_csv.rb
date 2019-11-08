@@ -23,14 +23,14 @@ class Railway::MakeCsv
     end
 
     #　辺のリストを書き出し
-    CSV.open('app/imports/railway/station_links.csv','w', headers: false) do |row|
+    CSV.open('app/imports/railway/data/station_links.csv','w', headers: false) do |row|
       links.each do |link|
         row << link
       end
     end
 
     # 座標を書き出し
-    CSV.open('app/imports/railway/station_pos.csv','w', headers: false) do |row|
+    CSV.open('app/imports/railway/data/station_pos.csv','w', headers: false) do |row|
       Station.all.each do |station|
         row << [station.lat.to_f * 1000000, station.lon.to_f * 1000000, station.id]
       end

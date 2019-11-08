@@ -1,7 +1,7 @@
 class Railway::ReadPlathome
   def self.read
     puts '駅のホームの座標を読み込みます'
-    CSV.read('app/imports/railway/eki_file.csv', headers: true).each do |row|
+    CSV.read('app/imports/railway/data/eki_file.csv', headers: true).each do |row|
       line = translate(row['line'])
       station = LineStation.find_by(station_name: row['name'], line_name: line)
 

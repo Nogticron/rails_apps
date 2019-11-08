@@ -2,7 +2,7 @@ class Railway::CsvImport
   def self.get
     # https://opendata-web.site/station/13/eki/
     puts '23区内の駅を取得します'
-    CSV.read('app/imports/railway/csv_roseneki.csv', headers: true).each do |row|
+    CSV.read('app/imports/railway/data/csv_roseneki.csv', headers: true).each do |row|
       unless Station.exists?(name: row['station_name'])
         station = Station.new(name: row['station_name'])
         station.lon = row['station_lon']
