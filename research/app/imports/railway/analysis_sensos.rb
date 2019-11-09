@@ -3,8 +3,10 @@ class Railway::AnalysisSensos
   @between_time = []
 
   def self.start
-    puts "駅在留時間を計算します"
+    puts "駅間時間を読み込みます"
     read_between_time_data
+
+    puts "\n駅在留時間を計算します"
     set_between_time
 
     puts "\n駅間移動データを作成します"
@@ -15,19 +17,19 @@ class Railway::AnalysisSensos
   end
 
   def self.read_between_time_data
+    puts ' 駅を読取中'
     CSV.read('app/imports/railway/data/between_time.csv', headers: false).each_with_index do |row, i|
       next if i < 1
 
-      if Station.find_by(name: row[2])
-        set = {id: row[0], name: row[2]}
-        @station_list << set
-      end
+      set = {id: row[0], name: row[2]}
+      @station_list << set
     end
 
     ids = @station_list.pluck(:id)
 
-    CSV.read('app/imports/railway/data/between_time.csv', headers: true).each do |row|
-      next unless @station_list.pluck(:name).include?(row[2])
+    puts " 駅間時間を読取中"
+    CSV.read('app/imports/railway/data/between_time.csv', headers: true).each_with_index do |row, i|
+      print "\r  Progress : #{i} /2009"
 
       line = []
       ids.each do |id|
@@ -45,28 +47,25 @@ class Railway::AnalysisSensos
       print "\r Progress : #{i += 1} /#{size}"
 
       via_station_num = # 経由駅の数
-        if person.r1_st3 == ''
+        if person.am_st3 == ''
           0
-        elsif person.r1_st4 == ''
+        elsif person.am_st4 == ''
           1
-        elsif person.r1_st5 == ''
+        elsif person.am_st5 == ''
           2
-        elsif person.r1_st6 == ''
+        elsif person.am_st6 == ''
           3
-        elsif person.r1_st7 == ''
+        elsif person.am_st7 == ''
           4
-        elsif person.r1_st8 == ''
+        elsif person.am_st8 == ''
           5
         else
           6
         end
 
-      next if !person.s_arriving_time || !person.s_time || !via_station_num
+      next if !person.s_arriving_time || !person.am_time1 || !via_station_num
 
-      ride_time = person.s_arriving_time - person.s_time
-      between_time = ride_time / (via_station_num + 1)
-
-      update_via_station_time(person, via_station_num, between_time)
+      update_via_station_time(person, via_station_num)
     end
   end
 
@@ -75,34 +74,34 @@ class Railway::AnalysisSensos
     size = Person.all.count
     Person.find_each do |person|
       print "\r Progress : #{i += 1} /#{size}"
-      station = Station.find_by(name: person.r1_st1)
+      station = Station.find_by(name: person.am_st1)
       person.update(st1_id: station.id) if station
 
-      station = Station.find_by(name: person.r1_st2)
+      station = Station.find_by(name: person.am_st2)
       person.update(st2_id: station.id) if station
 
-      next if person.r1_st3 == ''
-      station = Station.find_by(name: person.r1_st3)
+      next if person.am_st3 == ''
+      station = Station.find_by(name: person.am_st3)
       person.update(st3_id: station.id) if station
 
-      next if !person.r1_st4 = ''
-      station = Station.find_by(name: person.r1_st4)
+      next if !person.am_st4 = ''
+      station = Station.find_by(name: person.am_st4)
       person.update(st4_id: station.id) if station
 
-      next if !person.r1_st5 = ''
-      station = Station.find_by(name: person.r1_st5)
+      next if !person.am_st5 = ''
+      station = Station.find_by(name: person.am_st5)
       person.update(st5_id: station.id) if station
 
-      next if !person.r1_st6 = ''
-      station = Station.find_by(name: person.r1_st6)
+      next if !person.am_st6 = ''
+      station = Station.find_by(name: person.am_st6)
       person.update(st6_id: station.id) if station
 
-      next if !person.r1_st7 = ''
-      station = Station.find_by(name: person.r1_st7)
+      next if !person.am_st7 = ''
+      station = Station.find_by(name: person.am_st7)
       person.update(st7_id: station.id) if station
 
-      next if !person.r1_st8 = ''
-      station = Station.find_by(name: person.r1_st8)
+      next if !person.am_st8 = ''
+      station = Station.find_by(name: person.am_st8)
       person.update(st8_id: station.id) if station
     end
   end
@@ -120,57 +119,57 @@ class Railway::AnalysisSensos
         break if time == '23:59:00'
 
         sum = 0
-        if Person.where(st1_id: station.id, s_time: time..times[i+1])
-          people = Person.where(st1_id: station.id, s_time: time..times[i+1])
+        if Person.where(st1_id: station.id, am_time1: time..times[i+1])
+          people = Person.where(st1_id: station.id, am_time1: time..times[i+1])
           people.each do |p|
             sum += p.magnification
           end
         end
 
-        if Person.where(st2_id: station.id, r1_time2: time..times[i+1])
-          people = Person.where(st2_id: station.id, r1_time2: time..times[i+1])
+        if Person.where(st2_id: station.id, am_time2: time..times[i+1])
+          people = Person.where(st2_id: station.id, am_time2: time..times[i+1])
           people.each do |p|
             sum += p.magnification
           end
         end
 
-        if Person.where(st3_id: station.id, r1_time3: time..times[i+1])
-          people = Person.where(st3_id: station.id, r1_time3: time..times[i+1])
+        if Person.where(st3_id: station.id, am_time3: time..times[i+1])
+          people = Person.where(st3_id: station.id, am_time3: time..times[i+1])
           people.each do |p|
             sum += p.magnification
           end
         end
 
-        if Person.where(st4_id: station.id, r1_time4: time..times[i+1])
-          people = Person.where(st4_id: station.id, r1_time4: time..times[i+1])
+        if Person.where(st4_id: station.id, am_time4: time..times[i+1])
+          people = Person.where(st4_id: station.id, am_time4: time..times[i+1])
           people.each do |p|
             sum += p.magnification
           end
         end
 
-        if Person.where(st5_id: station.id, r1_time5: time..times[i+1])
-          people = Person.where(st5_id: station.id, r1_time5: time..times[i+1])
+        if Person.where(st5_id: station.id, am_time5: time..times[i+1])
+          people = Person.where(st5_id: station.id, am_time5: time..times[i+1])
           people.each do |p|
             sum += p.magnification
           end
         end
 
-        if Person.where(st6_id: station.id, r1_time6: time..times[i+1])
-          people = Person.where(st6_id: station.id, r1_time6: time..times[i+1])
+        if Person.where(st6_id: station.id, am_time6: time..times[i+1])
+          people = Person.where(st6_id: station.id, am_time6: time..times[i+1])
           people.each do |p|
             sum += p.magnification
           end
         end
 
-        if Person.where(st7_id: station.id, r1_time7: time..times[i+1])
-          people = Person.where(st7_id: station.id, r1_time7: time..times[i+1])
+        if Person.where(st7_id: station.id, am_time7: time..times[i+1])
+          people = Person.where(st7_id: station.id, am_time7: time..times[i+1])
           people.each do |p|
             sum += p.magnification
           end
         end
 
-        if Person.where(st8_id: station.id, r1_time8: time..times[i+1])
-          people = Person.where(st8_id: station.id, r1_time8: time..times[i+1])
+        if Person.where(st8_id: station.id, am_time8: time..times[i+1])
+          people = Person.where(st8_id: station.id, am_time8: time..times[i+1])
           people.each do |p|
             sum += p.magnification
           end
@@ -221,34 +220,37 @@ class Railway::AnalysisSensos
     station.save!
   end
 
-  def self.update_via_station_time(person, via_station_num, between_time)
+  def self.update_via_station_time(person, via_station_num)
+    ride_time = person.s_arriving_time - person.am_time1
+    between_time = ride_time / (via_station_num + 1)
+
     if via_station_num >= 0
-      person.update(r1_time2: person.s_time + between_time)
+      person.update(am_time2: person.am_time1 + between_time)
     end
 
     if via_station_num >= 1
-      person.update(r1_time3: person.r1_time2 + between_time)
+      person.update(am_time3: person.am_time2 + between_time)
     end
 
     if via_station_num >= 2
-      person.r1_time3 + between_time
-      person.update(r1_time4: person.r1_time3 + between_time)
+      person.am_time3 + between_time
+      person.update(am_time4: person.am_time3 + between_time)
     end
 
     if via_station_num >= 3
-      person.update(r1_time5: person.r1_time4 + between_time)
+      person.update(am_time5: person.am_time4 + between_time)
     end
 
     if via_station_num >= 4
-      person.update(r1_time6: person.r1_time5 + between_time)
+      person.update(am_time6: person.am_time5 + between_time)
     end
 
     if via_station_num >= 5
-      person.update(r1_time7: person.r1_time6 + between_time)
+      person.update(am_time7: person.am_time6 + between_time)
     end
 
     if via_station_num >= 6
-      person.update(r1_time8: person.r1_time7 + between_time)
+      person.update(am_time8: person.am_time7 + between_time)
     end
   end
 

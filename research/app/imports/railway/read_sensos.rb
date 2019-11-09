@@ -20,6 +20,8 @@ class Railway::ReadSensos
 
     puts '大都市交通センサスの駅を読み込みます'
     set_ids
+
+    puts
   end
 
   def self.read
@@ -32,17 +34,17 @@ class Railway::ReadSensos
       person.age = row['年齢']
       person.passport = row['定期券保有']
       person.magnification = row['拡大率']
-      person.s_time = convert_time(row['経路1-乗車時刻'])
+      person.am_time1 = convert_time(row['経路1-乗車時刻'])
       person.s_arriving_time = convert_time(row['経路1-降車時刻'])
 
-      person.r1_st1 = convert_station(row['経路1-乗車駅1'])
-      person.r1_st2 = convert_station(row['経路1-乗車駅2'])
-      person.r1_st3 = convert_station(row['経路1-乗車駅3'])
-      person.r1_st4 = convert_station(row['経路1-乗車駅4'])
-      person.r1_st5 = convert_station(row['経路1-乗車駅5'])
-      person.r1_st6 = convert_station(row['経路1-乗車駅6'])
-      person.r1_st7 = convert_station(row['経路1-乗車駅7'])
-      person.r1_st8 = convert_station(row['経路1-乗車駅8'])
+      person.am_st1 = convert_station(row['経路1-乗車駅1'])
+      person.am_st2 = convert_station(row['経路1-乗車駅2'])
+      person.am_st3 = convert_station(row['経路1-乗車駅3'])
+      person.am_st4 = convert_station(row['経路1-乗車駅4'])
+      person.am_st5 = convert_station(row['経路1-乗車駅5'])
+      person.am_st6 = convert_station(row['経路1-乗車駅6'])
+      person.am_st7 = convert_station(row['経路1-乗車駅7'])
+      person.am_st8 = convert_station(row['経路1-乗車駅8'])
       # 終着駅の時間を到着時間にする
       set_goal_time(person)
       person.save!
@@ -51,20 +53,20 @@ class Railway::ReadSensos
   end
 
   def self.set_goal_time(person)
-    if person.r1_st3 == ''
-      person.r1_time2 = person.s_arriving_time
-    elsif person.r1_st4 == ''
-      person.r1_time3 = person.s_arriving_time
-    elsif person.r1_st5 == ''
-      person.r1_time4 = person.s_arriving_time
-    elsif person.r1_st6 == ''
-      person.r1_time5 = person.s_arriving_time
-    elsif person.r1_st7 == ''
-      person.r1_time6 = person.s_arriving_time
-    elsif person.r1_st8 == ''
-      person.r1_time7 = person.s_arriving_time
+    if person.am_st3 == ''
+      person.am_time2 = person.s_arriving_time
+    elsif person.am_st4 == ''
+      person.am_time3 = person.s_arriving_time
+    elsif person.am_st5 == ''
+      person.am_time4 = person.s_arriving_time
+    elsif person.am_st6 == ''
+      person.am_time5 = person.s_arriving_time
+    elsif person.am_st7 == ''
+      person.am_time6 = person.s_arriving_time
+    elsif person.am_st8 == ''
+      person.am_time7 = person.s_arriving_time
     else
-      person.r1_time8 = person.s_arriving_time
+      person.am_time8 = person.s_arriving_time
     end
   end
 
@@ -72,42 +74,42 @@ class Railway::ReadSensos
     size = Person.all.size
     Person.find_each.with_index(1) do |person, i|
       print "\r Progress : #{i} /#{size}"
-      station = Station.find_by(name: person.r1_st1)
+      station = Station.find_by(name: person.am_st1)
       if station
         person.update(st1_id: station.id)
       end
 
-      station = Station.find_by(name: person.r1_st2)
+      station = Station.find_by(name: person.am_st2)
       if station
         person.update(st2_id: station.id)
       end
 
-      station = Station.find_by(name: person.r1_st3)
+      station = Station.find_by(name: person.am_st3)
       if station
         person.update(st3_id: station.id)
       end
 
-      station = Station.find_by(name: person.r1_st4)
+      station = Station.find_by(name: person.am_st4)
       if station
         person.update(st4_id: station.id)
       end
 
-      station = Station.find_by(name: person.r1_st5)
+      station = Station.find_by(name: person.am_st5)
       if station
         person.update(st5_id: station.id)
       end
 
-      station = Station.find_by(name: person.r1_st6)
+      station = Station.find_by(name: person.am_st6)
       if station
         person.update(st6_id: station.id)
       end
 
-      station = Station.find_by(name: person.r1_st7)
+      station = Station.find_by(name: person.am_st7)
       if station
         person.update(st7_id: station.id)
       end
 
-      station = Station.find_by(name: person.r1_st8)
+      station = Station.find_by(name: person.am_st8)
       if station
         person.update(st8_id: station.id)
       end
