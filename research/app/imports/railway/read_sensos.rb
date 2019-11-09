@@ -14,8 +14,18 @@ class Railway::ReadSensos
     end
   end
 
-  def self.read
+  def self.start
     puts '大都市交通センサスを読み込みます'
+    read
+
+    puts "駅在留時間を計算します"
+    set_between_time
+
+    puts "\n駅間移動データを作成します"
+    link_stations
+  end
+
+  def self.read
     CSV.read('app/imports/railway/data/H17_utf-8.csv', headers: true).each do |row|
       print "\r Progress : #{row['レコード番号']} /140238"
       next if Person.find_by(record_id: row['レコード番号'])
@@ -43,8 +53,22 @@ class Railway::ReadSensos
     puts "\n大都市交通センサスを読み込みました"
   end
 
+  def self.set_between_time
+    i = 0
+    size = Person.all.count
+    Person.find_each do |person|
+      print "\r Progress : #{i += 1} /#{size}"
+      via_station_num = return_via_station(person)
+      next if !person.s_arriving_time || !person.s_time || !via_station_num
+
+      ride_time = person.s_arriving_time - person.s_time
+      between_time = ride_time / (via_station_num + 1)
+
+      update_via_station_time(person, via_station_num, between_time)
+    end
+  end
+
   def self.link_stations
-    puts "\n駅間移動データを作成します"
     i = 0
     size = Person.all.count
     Person.find_each do |person|
@@ -196,23 +220,6 @@ class Railway::ReadSensos
       station.after_1100 = sum
     end
     station.save!
-  end
-
-  def self.set_between_time
-    puts "駅在留時間を計算します"
-    i = 0
-    size = Person.all.count
-    Person.find_each do |person|
-      print "\r Progress : #{i += 1} /#{size}"
-      via_station_num = return_via_station(person)
-      next if !person.s_arriving_time || !person.s_time || !via_station_num
-
-      ride_time = person.s_arriving_time - person.s_time
-      between_time = ride_time / (via_station_num + 1)
-
-      update_via_station_time(person, via_station_num, between_time)
-    end
-    link_stations
   end
 
   def self.update_via_station_time(person, via_station_num, between_time)
