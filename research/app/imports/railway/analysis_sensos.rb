@@ -1,4 +1,7 @@
 class Railway::AnalysisSensos
+  @station_list = []
+  @between_time = []
+
   def self.start
     puts "駅在留時間を計算します"
     read_between_time_data
@@ -11,12 +14,37 @@ class Railway::AnalysisSensos
     aggregate_people
   end
 
+  def self.read_between_time_data
+    CSV.read('app/imports/railway/data/between_time.csv', headers: false).each_with_index do |row, i|
+      next if i < 1
+
+      if Station.find_by(name: row[2])
+        set = {id: row[0], name: row[2]}
+        @station_list << set
+      end
+    end
+
+    ids = @station_list.pluck(:id)
+
+    CSV.read('app/imports/railway/data/between_time.csv', headers: true).each do |row|
+      next unless @station_list.pluck(:name).include?(row[2])
+
+      line = []
+      ids.each do |id|
+        line << row["#{id}"]
+      end
+
+      @between_time << line
+    end
+  end
+
   def self.set_between_time
     i = 0
     size = Person.all.count
     Person.find_each do |person|
       print "\r Progress : #{i += 1} /#{size}"
-      via_station_num =
+
+      via_station_num = # 経由駅の数
         if person.r1_st3 == ''
           0
         elsif person.r1_st4 == ''
