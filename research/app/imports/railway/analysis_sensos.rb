@@ -63,7 +63,7 @@ class Railway::AnalysisSensos
           6
         end
 
-      next if !person.s_arriving_time || !person.am_arrival_time1 || !via_station_num
+      next if !person.am_arriving_time || !person.am_departure_time1 || !via_station_num
 
       default_set_via_station_time(person, via_station_num)
       update_via_station_time(person, via_station_num)
@@ -75,7 +75,7 @@ class Railway::AnalysisSensos
     goal_st_idx = @station_list.pluck(:name).index(person.am_st2)
     if start_st_idx && goal_st_idx
       ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
-      person.am_arrival_time2 = person.am_arrival_time1 + ride_time
+      person.am_arrival_time2 = person.am_departure_time1 + ride_time
     end
 
     if via_station_num > 0
@@ -213,11 +213,11 @@ class Railway::AnalysisSensos
   end
 
   def self.default_set_via_station_time(person, via_station_num)
-    ride_time = person.s_arriving_time - person.am_arrival_time1
+    ride_time = person.am_arriving_time - person.am_departure_time1
     between_time = ride_time / (via_station_num + 1)
 
     if via_station_num >= 0
-      person.update(am_arrival_time2: person.am_arrival_time1 + between_time)
+      person.update(am_arrival_time2: person.am_departure_time1 + between_time)
     end
 
     if via_station_num >= 1
