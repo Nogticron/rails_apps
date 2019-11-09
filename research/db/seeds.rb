@@ -14,5 +14,4 @@ Railway::ScrapeStationCity.get
 CreateAreaCity.create_area_city_relations
 Railway::ScrapeStationRank.get
 
-Railway::ReadSensos.read
-Railway::ReadSensos.set_between_time
+Railway::ReadSensos.start
