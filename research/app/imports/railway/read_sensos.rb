@@ -16,7 +16,7 @@ class Railway::ReadSensos
 
   def self.read
     puts '大都市交通センサスを読み込みます'
-    CSV.read('app/imports/railway/H17_utf-8.csv', headers: true).each do |row|
+    CSV.read('app/imports/railway/data/H17_utf-8.csv', headers: true).each do |row|
       print "\r Progress : #{row['レコード番号']} /140238"
       next if Person.find_by(record_id: row['レコード番号'])
 

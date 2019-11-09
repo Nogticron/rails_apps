@@ -7,6 +7,9 @@ class CreateStations < ActiveRecord::Migration[5.2]
       t.string :lon, null: false
       t.string :lat, null: false
 
+      t.integer :passengers, default: 0
+      t.integer :rank
+
       t.integer :before_0600, default: 0
       t.integer :between_0600_0620, default: 0
       t.integer :between_0620_0640, default: 0

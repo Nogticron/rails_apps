@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 2019_10_09_164755) do
     t.bigint "station_id"
     t.string "line_name"
     t.string "station_name"
+    t.string "home_lat"
+    t.string "home_lon"
     t.integer "number"
     t.index ["line_id"], name: "index_line_stations_on_line_id"
     t.index ["station_id"], name: "index_line_stations_on_station_id"
@@ -83,6 +85,8 @@ ActiveRecord::Schema.define(version: 2019_10_09_164755) do
     t.string "name", null: false
     t.string "lon", null: false
     t.string "lat", null: false
+    t.integer "passengers", default: 0
+    t.integer "rank"
     t.integer "before_0600", default: 0
     t.integer "between_0600_0620", default: 0
     t.integer "between_0620_0640", default: 0
