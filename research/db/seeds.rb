@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 CreateAreaCity.create_area
-Railway::CsvImport.get
+Railway::StationImport.get
 Weather::ImportWeatherData.get
 ImportCityData.get
 Railway::ScrapeStationCity.get
@@ -15,3 +15,4 @@ CreateAreaCity.create_area_city_relations
 Railway::ScrapeStationRank.get
 
 Railway::ReadSensos.start
+Railway::AnalysisSensos.start

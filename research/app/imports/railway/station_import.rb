@@ -1,4 +1,4 @@
-class Railway::CsvImport
+class Railway::StationImport
   def self.get
     # https://opendata-web.site/station/13/eki/
     puts '23区内の駅を取得します'
