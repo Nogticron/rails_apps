@@ -17,6 +17,9 @@ class Railway::ReadSensos
   def self.start
     puts '大都市交通センサスを読み込みます'
     read
+
+    puts '大都市交通センサスの駅を読み込みます'
+    set_ids
   end
 
   def self.read
@@ -62,6 +65,52 @@ class Railway::ReadSensos
       person.r1_time7 = person.s_arriving_time
     else
       person.r1_time8 = person.s_arriving_time
+    end
+  end
+
+  def self.set_ids
+    size = Person.all.size
+    Person.find_each.with_index(1) do |person, i|
+      print "\r Progress : #{i} /#{size}"
+      station = Station.find_by(name: person.r1_st1)
+      if station
+        person.update(st1_id: station.id)
+      end
+
+      station = Station.find_by(name: person.r1_st2)
+      if station
+        person.update(st2_id: station.id)
+      end
+
+      station = Station.find_by(name: person.r1_st3)
+      if station
+        person.update(st3_id: station.id)
+      end
+
+      station = Station.find_by(name: person.r1_st4)
+      if station
+        person.update(st4_id: station.id)
+      end
+
+      station = Station.find_by(name: person.r1_st5)
+      if station
+        person.update(st5_id: station.id)
+      end
+
+      station = Station.find_by(name: person.r1_st6)
+      if station
+        person.update(st6_id: station.id)
+      end
+
+      station = Station.find_by(name: person.r1_st7)
+      if station
+        person.update(st7_id: station.id)
+      end
+
+      station = Station.find_by(name: person.r1_st8)
+      if station
+        person.update(st8_id: station.id)
+      end
     end
   end
 end
