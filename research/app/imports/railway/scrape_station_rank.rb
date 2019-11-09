@@ -13,23 +13,23 @@ class Railway::ScrapeStationRank
   @agent = Mechanize.new
 
   def self.return_rank(num)
-    if num > 500000
+    if num > 2000000
       10
-    elsif num > 300000
+    elsif num > 900000
       9
-    elsif num > 200000
+    elsif num > 700000
       8
-    elsif num > 100000
+    elsif num > 500000
       7
-    elsif num > 80000
+    elsif num > 400000
       6
-    elsif num > 50000
+    elsif num > 300000
       5
-    elsif num > 30000
+    elsif num > 200000
       4
-    elsif num > 10000
+    elsif num > 100000
       3
-    elsif num > 5000
+    elsif num > 40000
       2
     else
       1
@@ -37,6 +37,10 @@ class Railway::ScrapeStationRank
   end
 
   def self.get
+    Station.find_each do |station|
+      station.update(passengers: 0, rank: nil)
+    end
+
     puts 'JRの駅の規模データを取得します' #2018年
     get_jr_data(JR_TOP_URL)
     1.upto(9) do |i|
@@ -65,7 +69,7 @@ class Railway::ScrapeStationRank
     puts '京急線の駅の規模データを取得します' #2018年度
     get_keikyu_data
 
-    puts '形成線の駅の規模データを取得します' #2018年度
+    puts '京成線の駅の規模データを取得します' #2018年度
     get_keisei_data
 
     puts 'ゆりかもめの駅の規模データを取得します' #2018年度
@@ -85,6 +89,11 @@ class Railway::ScrapeStationRank
 
     # データがない世田谷線と荒川線はダミーデータを入れる
     put_dummy_data
+
+    # 駅のランク付け
+    Station.find_each do |station|
+      station.update(rank: return_rank(station.passengers))
+    end
   end
 
   def self.put_dummy_data
@@ -135,6 +144,12 @@ class Railway::ScrapeStationRank
         end
       end
     end
+
+    # 東京と上野は新幹線を追加
+    tokyo_st = Station.find_by(name: '東京')
+    ueno_st = Station.find_by(name: '上野')
+    tokyo_st.update(passengers: tokyo_st.passengers + 79991)
+    ueno_st.update(passengers: ueno_st.passengers + 12337)
   end
 
   def self.get_toei_data

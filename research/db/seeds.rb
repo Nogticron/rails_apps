@@ -8,11 +8,11 @@
 
 CreateAreaCity.create_area
 Railway::CsvImport.get
-# Weather::ImportWeatherData.get
+Weather::ImportWeatherData.get
 ImportCityData.get
 Railway::ScrapeStationCity.get
-CreateAreaCity.create_area_city_relation
+CreateAreaCity.create_area_city_relations
 Railway::ScrapeStationRank.get
 
-# Railway::ReadSensos.read
-# Railway::ReadSensos.set_between_time
+Railway::ReadSensos.read
+Railway::ReadSensos.set_between_time
