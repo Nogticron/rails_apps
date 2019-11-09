@@ -63,7 +63,7 @@ class Railway::AnalysisSensos
           6
         end
 
-      next if !person.s_arriving_time || !person.am_time1 || !via_station_num
+      next if !person.s_arriving_time || !person.am_arrival_time1 || !via_station_num
 
       default_set_via_station_time(person, via_station_num)
       update_via_station_time(person, via_station_num)
@@ -75,7 +75,7 @@ class Railway::AnalysisSensos
     goal_st_idx = @station_list.pluck(:name).index(person.am_st2)
     if start_st_idx && goal_st_idx
       ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
-      person.am_time2 = person.am_time1 + ride_time
+      person.am_arrival_time2 = person.am_arrival_time1 + ride_time
     end
 
     if via_station_num > 0
@@ -83,7 +83,7 @@ class Railway::AnalysisSensos
       goal_st_idx = @station_list.pluck(:name).index(person.am_st3)
       if start_st_idx && goal_st_idx
         ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
-        person.am_time3 = person.am_time2 + ride_time
+        person.am_arrival_time3 = person.am_arrival_time2 + ride_time
       end
     end
 
@@ -92,7 +92,7 @@ class Railway::AnalysisSensos
       goal_st_idx = @station_list.pluck(:name).index(person.am_st4)
       if start_st_idx && goal_st_idx
         ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
-        person.am_time4 = person.am_time3 + ride_time
+        person.am_arrival_time4 = person.am_arrival_time3 + ride_time
       end
     end
 
@@ -101,7 +101,7 @@ class Railway::AnalysisSensos
       goal_st_idx = @station_list.pluck(:name).index(person.am_st5)
       if start_st_idx && goal_st_idx
         ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
-        person.am_time5 = person.am_time4 + ride_time
+        person.am_arrival_time5 = person.am_arrival_time4 + ride_time
       end
     end
 
@@ -110,7 +110,7 @@ class Railway::AnalysisSensos
       goal_st_idx = @station_list.pluck(:name).index(person.am_st6)
       if start_st_idx && goal_st_idx
         ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
-        person.am_time6 = person.am_time5 + ride_time
+        person.am_arrival_time6 = person.am_arrival_time5 + ride_time
       end
     end
 
@@ -119,7 +119,7 @@ class Railway::AnalysisSensos
       goal_st_idx = @station_list.pluck(:name).index(person.am_st7)
       if start_st_idx && goal_st_idx
         ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
-        person.am_time7 = person.am_time6 + ride_time
+        person.am_arrival_time7 = person.am_arrival_time6 + ride_time
       end
     end
 
@@ -128,7 +128,7 @@ class Railway::AnalysisSensos
       goal_st_idx = @station_list.pluck(:name).index(person.am_st8)
       if start_st_idx && goal_st_idx
         ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
-        person.am_time8 = person.am_time7 + ride_time
+        person.am_arrival_time8 = person.am_arrival_time7 + ride_time
       end
     end
 
@@ -213,36 +213,36 @@ class Railway::AnalysisSensos
   end
 
   def self.default_set_via_station_time(person, via_station_num)
-    ride_time = person.s_arriving_time - person.am_time1
+    ride_time = person.s_arriving_time - person.am_arrival_time1
     between_time = ride_time / (via_station_num + 1)
 
     if via_station_num >= 0
-      person.update(am_time2: person.am_time1 + between_time)
+      person.update(am_arrival_time2: person.am_arrival_time1 + between_time)
     end
 
     if via_station_num >= 1
-      person.update(am_time3: person.am_time2 + between_time)
+      person.update(am_arrival_time3: person.am_arrival_time2 + between_time)
     end
 
     if via_station_num >= 2
-      person.am_time3 + between_time
-      person.update(am_time4: person.am_time3 + between_time)
+      person.am_arrival_time3 + between_time
+      person.update(am_arrival_time4: person.am_arrival_time3 + between_time)
     end
 
     if via_station_num >= 3
-      person.update(am_time5: person.am_time4 + between_time)
+      person.update(am_arrival_time5: person.am_arrival_time4 + between_time)
     end
 
     if via_station_num >= 4
-      person.update(am_time6: person.am_time5 + between_time)
+      person.update(am_arrival_time6: person.am_arrival_time5 + between_time)
     end
 
     if via_station_num >= 5
-      person.update(am_time7: person.am_time6 + between_time)
+      person.update(am_arrival_time7: person.am_arrival_time6 + between_time)
     end
 
     if via_station_num >= 6
-      person.update(am_time8: person.am_time7 + between_time)
+      person.update(am_arrival_time8: person.am_arrival_time7 + between_time)
     end
   end
 

@@ -34,7 +34,7 @@ class Railway::ReadSensos
       person.age = row['年齢']
       person.passport = row['定期券保有']
       person.magnification = row['拡大率']
-      person.am_time1 = convert_time(row['経路1-乗車時刻'])
+      person.am_arrival_time1 = convert_time(row['経路1-乗車時刻'])
       person.s_arriving_time = convert_time(row['経路1-降車時刻'])
 
       person.am_st1 = convert_station(row['経路1-乗車駅1'])
@@ -54,19 +54,19 @@ class Railway::ReadSensos
 
   def self.set_goal_time(person)
     if person.am_st3 == ''
-      person.am_time2 = person.s_arriving_time
+      person.am_arrival_time2 = person.s_arriving_time
     elsif person.am_st4 == ''
-      person.am_time3 = person.s_arriving_time
+      person.am_arrival_time3 = person.s_arriving_time
     elsif person.am_st5 == ''
-      person.am_time4 = person.s_arriving_time
+      person.am_arrival_time4 = person.s_arriving_time
     elsif person.am_st6 == ''
-      person.am_time5 = person.s_arriving_time
+      person.am_arrival_time5 = person.s_arriving_time
     elsif person.am_st7 == ''
-      person.am_time6 = person.s_arriving_time
+      person.am_arrival_time6 = person.s_arriving_time
     elsif person.am_st8 == ''
-      person.am_time7 = person.s_arriving_time
+      person.am_arrival_time7 = person.s_arriving_time
     else
-      person.am_time8 = person.s_arriving_time
+      person.am_arrival_time8 = person.s_arriving_time
     end
   end
 
