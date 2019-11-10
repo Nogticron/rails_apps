@@ -9,9 +9,6 @@ class Railway::AnalysisSensos
     puts "\n駅在留時間を計算します"
     set_between_time
 
-    puts "\n駅間移動データを作成します"
-    # link_stations
-
     puts "\n駅ごとの人数を集計します"
     # aggregate_people
   end
@@ -204,43 +201,6 @@ class Railway::AnalysisSensos
     end
 
     person.save!
-  end
-
-  def self.link_stations
-    i = 0
-    size = Person.all.count
-    Person.find_each do |person|
-      print "\r Progress : #{i += 1} /#{size}"
-      station = Station.find_by(name: person.am_st1)
-      person.update(st1_id: station.id) if station
-
-      station = Station.find_by(name: person.am_st2)
-      person.update(st2_id: station.id) if station
-
-      next if person.am_st3 == ''
-      station = Station.find_by(name: person.am_st3)
-      person.update(st3_id: station.id) if station
-
-      next if !person.am_st4 = ''
-      station = Station.find_by(name: person.am_st4)
-      person.update(st4_id: station.id) if station
-
-      next if !person.am_st5 = ''
-      station = Station.find_by(name: person.am_st5)
-      person.update(st5_id: station.id) if station
-
-      next if !person.am_st6 = ''
-      station = Station.find_by(name: person.am_st6)
-      person.update(st6_id: station.id) if station
-
-      next if !person.am_st7 = ''
-      station = Station.find_by(name: person.am_st7)
-      person.update(st7_id: station.id) if station
-
-      next if !person.am_st8 = ''
-      station = Station.find_by(name: person.am_st8)
-      person.update(st8_id: station.id) if station
-    end
   end
 
   def self.input_time_to_station(station, sum, i)

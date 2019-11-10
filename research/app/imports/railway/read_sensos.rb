@@ -75,44 +75,28 @@ class Railway::ReadSensos
     Person.find_each.with_index(1) do |person, i|
       print "\r Progress : #{i} /#{size}"
       station = Station.find_by(name: person.am_st1)
-      if station
-        person.update(st1_id: station.id)
-      end
+      person.update(st1_id: station.id) if station
 
       station = Station.find_by(name: person.am_st2)
-      if station
-        person.update(st2_id: station.id)
-      end
+      person.update(st2_id: station.id) if station
 
       station = Station.find_by(name: person.am_st3)
-      if station
-        person.update(st3_id: station.id)
-      end
+      person.update(st3_id: station.id) if station
 
       station = Station.find_by(name: person.am_st4)
-      if station
-        person.update(st4_id: station.id)
-      end
+      person.update(st4_id: station.id) if station
 
       station = Station.find_by(name: person.am_st5)
-      if station
-        person.update(st5_id: station.id)
-      end
+      person.update(st5_id: station.id) if station
 
       station = Station.find_by(name: person.am_st6)
-      if station
-        person.update(st6_id: station.id)
-      end
+      person.update(st6_id: station.id) if station
 
       station = Station.find_by(name: person.am_st7)
-      if station
-        person.update(st7_id: station.id)
-      end
+      person.update(st7_id: station.id) if station
 
       station = Station.find_by(name: person.am_st8)
-      if station
-        person.update(st8_id: station.id)
-      end
+      person.update(st8_id: station.id) if station
     end
   end
 end
