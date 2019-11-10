@@ -105,15 +105,16 @@ class Railway::AnalysisSensos
       end
     end
 
-    # am_st3滞留の時間を設定する
-    if person.st3_id
-      stay_time = Station.find(person.st3_id).transfer_time
-      person.update(am_departure_time3: person.am_arrival_time3 + stay_time)
-    else
-      person.update(am_departure_time3: person.am_arrival_time3 + 120)
-    end
+    if via_station_num > 1
+      # am_st3滞留の時間を設定する
+      if person.st3_id
+        stay_time = Station.find(person.st3_id).transfer_time
+        person.update(am_departure_time3: person.am_arrival_time3 + stay_time)
+      else
+        person.update(am_departure_time3: person.am_arrival_time3 + 120)
+      end
 
-    # am_st3出発からam_st4到着までの時間を設定する
+      # am_st3出発からam_st4到着までの時間を設定する
       start_st_idx = @station_list.pluck(:name).index(person.am_st3)
       goal_st_idx = @station_list.pluck(:name).index(person.am_st4)
       if start_st_idx && goal_st_idx
@@ -122,16 +123,16 @@ class Railway::AnalysisSensos
       end
     end
 
-    # am_st4滞留の時間を設定する
-    if person.st4_id
-      stay_time = Station.find(person.st4_id).transfer_time
-      person.update(am_departure_time4: person.am_arrival_time4 + stay_time)
-    else
-      person.update(am_departure_time4: person.am_arrival_time4 + 120)
-    end
-
-    # am_st4出発からam_st5到着までの時間を設定する
     if via_station_num > 2
+      # am_st4滞留の時間を設定する
+      if person.st4_id
+        stay_time = Station.find(person.st4_id).transfer_time
+        person.update(am_departure_time4: person.am_arrival_time4 + stay_time)
+      else
+        person.update(am_departure_time4: person.am_arrival_time4 + 120)
+      end
+
+      # am_st4出発からam_st5到着までの時間を設定する
       start_st_idx = @station_list.pluck(:name).index(person.am_st4)
       goal_st_idx = @station_list.pluck(:name).index(person.am_st5)
       if start_st_idx && goal_st_idx
@@ -140,16 +141,16 @@ class Railway::AnalysisSensos
       end
     end
 
-    # am_st5滞留の時間を設定する
-    if person.st5_id
-      stay_time = Station.find(person.st5_id).transfer_time
-      person.update(am_departure_time5: person.am_arrival_time5 + stay_time)
-    else
-      person.update(am_departure_time5: person.am_arrival_time5 + 120)
-    end
-
-    # am_st5出発からam_st6到着までの時間を設定する
     if via_station_num > 3
+      # am_st5滞留の時間を設定する
+      if person.st5_id
+        stay_time = Station.find(person.st5_id).transfer_time
+        person.update(am_departure_time5: person.am_arrival_time5 + stay_time)
+      else
+        person.update(am_departure_time5: person.am_arrival_time5 + 120)
+      end
+
+      # am_st5出発からam_st6到着までの時間を設定する
       start_st_idx = @station_list.pluck(:name).index(person.am_st5)
       goal_st_idx = @station_list.pluck(:name).index(person.am_st6)
       if start_st_idx && goal_st_idx
@@ -158,16 +159,16 @@ class Railway::AnalysisSensos
       end
     end
 
-    # am_st6滞留の時間を設定する
-    if person.st6_id
-      stay_time = Station.find(person.st6_id).transfer_time
-      person.update(am_departure_time6: person.am_arrival_time6 + stay_time)
-    else
-      person.update(am_departure_time6: person.am_arrival_time6 + 120)
-    end
-
-    # am_st6出発からam_st7到着までの時間を設定する
     if via_station_num > 4
+      # am_st6滞留の時間を設定する
+      if person.st6_id
+        stay_time = Station.find(person.st6_id).transfer_time
+        person.update(am_departure_time6: person.am_arrival_time6 + stay_time)
+      else
+        person.update(am_departure_time6: person.am_arrival_time6 + 120)
+      end
+
+      # am_st6出発からam_st7到着までの時間を設定する
       start_st_idx = @station_list.pluck(:name).index(person.am_st6)
       goal_st_idx = @station_list.pluck(:name).index(person.am_st7)
       if start_st_idx && goal_st_idx
@@ -176,30 +177,30 @@ class Railway::AnalysisSensos
       end
     end
 
-    # am_st7滞留の時間を設定する
-    if person.st7_id
-      stay_time = Station.find(person.st7_id).transfer_time
-      person.update(am_departure_time7: person.am_arrival_time7 + stay_time)
-    else
-      person.update(am_departure_time7: person.am_arrival_time7 + 120)
-    end
-
-    # am_st7出発からam_st8到着までの時間を設定する
     if via_station_num > 5
+      # am_st7滞留の時間を設定する
+      if person.st7_id
+        stay_time = Station.find(person.st7_id).transfer_time
+        person.update(am_departure_time7: person.am_arrival_time7 + stay_time)
+      else
+        person.update(am_departure_time7: person.am_arrival_time7 + 120)
+      end
+
+      # am_st7出発からam_st8到着までの時間を設定する
       start_st_idx = @station_list.pluck(:name).index(person.am_st7)
       goal_st_idx = @station_list.pluck(:name).index(person.am_st8)
       if start_st_idx && goal_st_idx
         ride_time = @between_time[start_st_idx][goal_st_idx].to_i * 60
         person.am_arrival_time8 = person.am_departure_time7 + ride_time
       end
-    end
 
-    # am_st8をでた時間を設定する
-    if person.st8_id
-      stay_time = Station.find(person.st8_id).transfer_time
-      person.update(am_departure_time8: person.am_arrival_time8 + stay_time)
-    else
-      person.update(am_departure_time8: person.am_arrival_time8 + 120)
+      # am_st8をでた時間を設定する
+      if person.st8_id
+        stay_time = Station.find(person.st8_id).transfer_time
+        person.update(am_departure_time8: person.am_arrival_time8 + stay_time)
+      else
+        person.update(am_departure_time8: person.am_arrival_time8 + 120)
+      end
     end
 
     person.save!

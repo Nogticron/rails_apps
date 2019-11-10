@@ -17,3 +17,4 @@ Railway::ScrapeStationRank.get
 Railway::ReadSensos.start
 # 途中で止めたら　rails runner 'Railway::ReadSensos.set_ids'
 Railway::AnalysisSensos.start
+# rails runner 'Railway::AnalysisSensos.start'
