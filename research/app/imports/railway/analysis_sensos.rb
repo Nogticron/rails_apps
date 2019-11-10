@@ -245,5 +245,4 @@ class Railway::AnalysisSensos
       person.update(am_arrival_time8: person.am_arrival_time7 + between_time)
     end
   end
-
 end

@@ -9,6 +9,7 @@ class CreatePeople < ActiveRecord::Migration[5.2]
       t.time :am_arriving_time
       t.string :am_st1, null: false
       t.integer :st1_id
+      t.time :am_arrival_time1
       t.time :am_departure_time1
       t.string :am_st2
       t.integer :st2_id
@@ -37,6 +38,7 @@ class CreatePeople < ActiveRecord::Migration[5.2]
       t.string :am_st8
       t.integer :st8_id
       t.time :am_arrival_time8
+      t.time :am_departure_time8
     end
   end
 end

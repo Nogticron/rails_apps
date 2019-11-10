@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 2019_10_09_164755) do
     t.time "am_arriving_time"
     t.string "am_st1", null: false
     t.integer "st1_id"
+    t.time "am_arrival_time1"
     t.time "am_departure_time1"
     t.string "am_st2"
     t.integer "st2_id"
@@ -84,6 +85,7 @@ ActiveRecord::Schema.define(version: 2019_10_09_164755) do
     t.string "am_st8"
     t.integer "st8_id"
     t.time "am_arrival_time8"
+    t.time "am_departure_time8"
   end
 
   create_table "stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
