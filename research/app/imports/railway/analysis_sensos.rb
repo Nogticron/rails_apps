@@ -203,46 +203,6 @@ class Railway::AnalysisSensos
     person.save!
   end
 
-  def self.input_time_to_station(station, sum, i)
-    case i
-    when 0
-      station.before_0600 = sum
-    when 1
-      station.between_0600_0620 = sum
-    when 2
-      station.between_0620_0640 = sum
-    when 3
-      station.between_0640_0700 = sum
-    when 4
-      station.between_0700_0720 = sum
-    when 5
-      station.between_0720_0740 = sum
-    when 6
-      station.between_0740_0800 = sum
-    when 7
-      station.between_0800_0820 = sum
-    when 8
-      station.between_0820_0840 = sum
-    when 9
-      station.between_0840_0900 = sum
-    when 10
-      station.between_0900_0920 = sum
-    when 11
-      station.between_0920_0940 = sum
-    when 12
-      station.between_0940_1000 = sum
-    when 13
-      station.between_1000_1020 = sum
-    when 14
-      station.between_1020_1040 = sum
-    when 15
-      station.between_1040_1100 = sum
-    when 16
-      station.after_1100 = sum
-    end
-    station.save!
-  end
-
   def self.default_set_via_station_time(person, via_station_num)
     ride_time = person.am_arriving_time - person.am_departure_time1
     between_time = ride_time / (via_station_num + 1)
