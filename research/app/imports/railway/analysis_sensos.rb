@@ -1,6 +1,7 @@
 class Railway::AnalysisSensos
   @station_list = []
   @between_time = []
+  $data = []
 
   def self.start
     puts "駅間時間を読み込みます"
@@ -10,7 +11,7 @@ class Railway::AnalysisSensos
     set_between_time
 
     puts "\n駅ごとの人数を集計します"
-    # aggregate_people
+    aggregate_people
   end
 
   def self.read_between_time_data
@@ -247,5 +248,143 @@ class Railway::AnalysisSensos
     end
 
     person.save!
+  end
+
+  def self.aggregate_people
+    # データセットを初期化
+    1.upto(650) do |i|
+      set = {st_id: i, bef0600: 0, af_0600: 0, af_0615: 0, af_0630: 0, af_0645: 0, af_0700: 0, af_0715: 0,
+              af_0730: 0, af_0745: 0, af_0800: 0, af_0815: 0, af_0830: 0, af_0845: 0, af_0900: 0,
+               af_0915: 0, af_0930: 0, af_0945: 0, af_1000: 0, af_1015: 0, af_01030: 0, af_1045: 0, af_1100: 0,
+                 af_1115: 0, af_1130: 0, af_1145: 0, af_1200: 0,}
+      $data << set
+    end
+
+    Person.find_each do |person|
+      magnification = person.magnification
+
+      st_id = person.st1_id
+      if st_id
+        arrival_time = person.time_zone(person.am_arrival_time1)
+        count_up(st_id, arrival_time, magnification)
+        departure_time = person.time_zone(person.am_departure_time1)
+        count_up(st_id, departure_time, magnification)
+      end
+
+      st_id = person.st2_id
+      if st_id
+        arrival_time = person.time_zone(person.am_arrival_time2)
+        count_up(st_id, arrival_time, magnification)
+        departure_time = person.time_zone(person.am_departure_time2)
+        count_up(st_id, departure_time, magnification)
+      end
+
+      st_id = person.st3_id
+      if st_id
+        arrival_time = person.time_zone(person.am_arrival_time3)
+        count_up(st_id, arrival_time, magnification)
+        departure_time = person.time_zone(person.am_departure_time3)
+        count_up(st_id, departure_time, magnification)
+      end
+
+      st_id = person.st4_id
+      if st_id
+        arrival_time = person.time_zone(person.am_arrival_time4)
+        count_up(st_id, arrival_time, magnification)
+        departure_time = person.time_zone(person.am_departure_time4)
+        count_up(st_id, departure_time, magnification)
+      end
+
+      st_id = person.st5_id
+      if st_id
+        arrival_time = person.time_zone(person.am_arrival_time5)
+        count_up(st_id, arrival_time, magnification)
+        departure_time = person.time_zone(person.am_departure_time5)
+        count_up(st_id, departure_time, magnification)
+      end
+
+      st_id = person.st6_id
+      if st_id
+        arrival_time = person.time_zone(person.am_arrival_time6)
+        count_up(st_id, arrival_time, magnification)
+        departure_time = person.time_zone(person.am_departure_time6)
+        count_up(st_id, departure_time, magnification)
+      end
+
+      st_id = person.st7_id
+      if st_id
+        arrival_time = person.time_zone(person.am_arrival_time7)
+        count_up(st_id, arrival_time, magnification)
+        departure_time = person.time_zone(person.am_departure_time7)
+        count_up(st_id, departure_time, magnification)
+      end
+
+      st_id = person.st8_id
+      if st_id
+        arrival_time = person.time_zone(person.am_arrival_time8)
+        count_up(st_id, arrival_time, magnification)
+        departure_time = person.time_zone(person.am_departure_time8)
+        count_up(st_id, departure_time, magnification)
+      end
+
+      break
+    end
+  end
+
+  def self.count_up(st_id, time, mag)
+    case time
+    when 'bef0600'
+      $data[st_id - 1][:bef0600] += mag # magは拡大率
+    when '0600'
+      $data[st_id - 1][:af0600] += mag
+    when '0615'
+      $data[st_id - 1][:af0615] += mag
+    when '0630'
+      $data[st_id - 1][:af0630] += mag
+    when '0645'
+      $data[st_id - 1][:af0645] += mag
+    when '0700'
+      $data[st_id - 1][:af0700] += mag
+    when '0715'
+      $data[st_id - 1][:af0715] += mag
+    when '0730'
+      $data[st_id - 1][:af0730] += mag
+    when '0745'
+      $data[st_id - 1][:af0745] += mag
+    when '0800'
+      $data[st_id - 1][:af0800] += mag
+    when '0815'
+      $data[st_id - 1][:af0815] += mag
+    when '0830'
+      $data[st_id - 1][:af0830] += mag
+    when '0845'
+      $data[st_id - 1][:af0845] += mag
+    when '0900'
+      $data[st_id - 1][:af0900] += mag
+    when '0915'
+      $data[st_id - 1][:af0915] += mag
+    when '0930'
+      $data[st_id - 1][:af0930] += mag
+    when '0945'
+      $data[st_id - 1][:af0945] += mag
+    when '1000'
+      $data[st_id - 1][:af1000] += mag
+    when '1015'
+      $data[st_id - 1][:af1015] += mag
+    when '1030'
+      $data[st_id - 1][:af1030] += mag
+    when '1045'
+      $data[st_id - 1][:af1045] += mag
+    when '1100'
+      $data[st_id - 1][:af1100] += mag
+    when '1115'
+      $data[st_id - 1][:af1115] += mag
+    when '1130'
+      $data[st_id - 1][:af1130] += mag
+    when '1145'
+      $data[st_id - 1][:af1145] += mag
+    when '1200'
+      $data[st_id - 1][:af1200] += mag
+    end
   end
 end
