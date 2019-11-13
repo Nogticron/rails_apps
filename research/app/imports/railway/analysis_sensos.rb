@@ -12,6 +12,9 @@ class Railway::AnalysisSensos
 
     puts "\n駅ごとの人数を集計します"
     aggregate_people
+
+    # puts "\nCSVに書き出しています"
+    # export_csv
   end
 
   def self.read_between_time_data
@@ -253,82 +256,87 @@ class Railway::AnalysisSensos
   def self.aggregate_people
     # データセットを初期化
     1.upto(650) do |i|
-      set = {st_id: i, bef0600: 0, af_0600: 0, af_0615: 0, af_0630: 0, af_0645: 0, af_0700: 0, af_0715: 0,
-              af_0730: 0, af_0745: 0, af_0800: 0, af_0815: 0, af_0830: 0, af_0845: 0, af_0900: 0,
-               af_0915: 0, af_0930: 0, af_0945: 0, af_1000: 0, af_1015: 0, af_01030: 0, af_1045: 0, af_1100: 0,
-                 af_1115: 0, af_1130: 0, af_1145: 0, af_1200: 0,}
+      set = {st_id: i, bef0600: 0, af0600: 0, af0615: 0, af0630: 0, af0645: 0, af0700: 0, af0715: 0,
+              af0730: 0, af0745: 0, af0800: 0, af0815: 0, af0830: 0, af0845: 0, af0900: 0,
+               af0915: 0, af0930: 0, af0945: 0, af1000: 0, af1015: 0, af1030: 0, af1045: 0, af1100: 0,
+                af1115: 0, af1130: 0, af1145: 0, af1200: 0,}
       $data << set
     end
 
-    Person.find_each do |person|
+    size = Person.all.size
+    Person.find_each.with_index do |person, i|
+
+      print "\r  Progress : #{i+1} /#{size}"
+
       magnification = person.magnification
 
       st_id = person.st1_id
       if st_id
         arrival_time = person.time_zone(person.am_arrival_time1)
-        count_up(st_id, arrival_time, magnification)
+        count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time1)
-        count_up(st_id, departure_time, magnification)
+        count_up(st_id, departure_time, magnification) if departure_time
       end
 
       st_id = person.st2_id
       if st_id
         arrival_time = person.time_zone(person.am_arrival_time2)
-        count_up(st_id, arrival_time, magnification)
+        count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time2)
-        count_up(st_id, departure_time, magnification)
+        count_up(st_id, departure_time, magnification) if departure_time
       end
 
       st_id = person.st3_id
       if st_id
         arrival_time = person.time_zone(person.am_arrival_time3)
-        count_up(st_id, arrival_time, magnification)
+        count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time3)
-        count_up(st_id, departure_time, magnification)
+        count_up(st_id, departure_time, magnification) if departure_time
       end
 
       st_id = person.st4_id
       if st_id
         arrival_time = person.time_zone(person.am_arrival_time4)
-        count_up(st_id, arrival_time, magnification)
+        count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time4)
-        count_up(st_id, departure_time, magnification)
+        count_up(st_id, departure_time, magnification) if departure_time
       end
 
       st_id = person.st5_id
       if st_id
         arrival_time = person.time_zone(person.am_arrival_time5)
-        count_up(st_id, arrival_time, magnification)
+        count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time5)
-        count_up(st_id, departure_time, magnification)
+        count_up(st_id, departure_time, magnification) if departure_time
       end
 
       st_id = person.st6_id
       if st_id
         arrival_time = person.time_zone(person.am_arrival_time6)
-        count_up(st_id, arrival_time, magnification)
+        count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time6)
-        count_up(st_id, departure_time, magnification)
+        count_up(st_id, departure_time, magnification) if departure_time
       end
 
       st_id = person.st7_id
       if st_id
         arrival_time = person.time_zone(person.am_arrival_time7)
-        count_up(st_id, arrival_time, magnification)
+        count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time7)
-        count_up(st_id, departure_time, magnification)
+        count_up(st_id, departure_time, magnification) if departure_time
       end
 
       st_id = person.st8_id
       if st_id
         arrival_time = person.time_zone(person.am_arrival_time8)
-        count_up(st_id, arrival_time, magnification)
+        count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time8)
-        count_up(st_id, departure_time, magnification)
+        count_up(st_id, departure_time, magnification) if departure_time
       end
-
-      break
     end
+
+    puts "\nCSVに書き出しています"
+    export_csv
   end
 
   def self.count_up(st_id, time, mag)
@@ -385,6 +393,19 @@ class Railway::AnalysisSensos
       $data[st_id - 1][:af1145] += mag
     when '1200'
       $data[st_id - 1][:af1200] += mag
+    end
+  end
+
+  def self.export_csv
+    CSV.open('app/imports/railway/data/aggregate_people.csv','w', headers: true) do |row|
+      row << ['name', 'st_id', 'bef0600', 'af0600', 'af0615', 'af0630', 'af0645', 'af0700', 'af0715',
+               'af0730', 'af0745', 'af0800', 'af0815', 'af0830', 'af0845', 'af0900', 'af0915',
+               'af0930', 'af0945', 'af1000', 'af1015', 'af1030', 'af1045', 'af1100', 'af1115',
+               'af1130', 'af1145', 'af1200']
+      $data.each do |set|
+        name = Station.find(set[:st_id]).name
+        row << set.values.unshift(name)
+      end
     end
   end
 end
