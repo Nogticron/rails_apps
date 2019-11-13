@@ -7,12 +7,14 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 CreateAreaCity.create_area
-Railway::CsvImport.get
+Railway::StationImport.get
 Weather::ImportWeatherData.get
 ImportCityData.get
 Railway::ScrapeStationCity.get
-CreateAreaCity.create_area_city_relations
+CreateAreaCity.create_area_city_relation
 Railway::ScrapeStationRank.get
 
-Railway::ReadSensos.read
-Railway::ReadSensos.set_between_time
+Railway::ReadSensos.start
+# 途中で止めたら　rails runner 'Railway::ReadSensos.set_ids'
+Railway::AnalysisSensos.start
+# rails runner 'Railway::AnalysisSensos.start'
