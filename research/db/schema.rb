@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_09_164755) do
+ActiveRecord::Schema.define(version: 2019_11_15_081137) do
 
   create_table "areas", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2019_10_09_164755) do
     t.string "lon", null: false
     t.string "lat", null: false
     t.integer "passengers", default: 0
+    t.integer "peak_passengers"
     t.integer "rank"
     t.index ["city_id"], name: "index_stations_on_city_id"
   end
