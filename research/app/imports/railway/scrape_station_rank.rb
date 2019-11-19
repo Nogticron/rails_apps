@@ -12,30 +12,6 @@ class Railway::ScrapeStationRank
 
   @agent = Mechanize.new
 
-  def self.return_rank(num)
-    if num > 2000000
-      10
-    elsif num > 900000
-      9
-    elsif num > 700000
-      8
-    elsif num > 500000
-      7
-    elsif num > 400000
-      6
-    elsif num > 300000
-      5
-    elsif num > 200000
-      4
-    elsif num > 100000
-      3
-    elsif num > 40000
-      2
-    else
-      1
-    end
-  end
-
   def self.get
     Station.find_each do |station|
       station.update(passengers: 0, rank: nil)
@@ -89,11 +65,6 @@ class Railway::ScrapeStationRank
 
     # データがない世田谷線と荒川線はダミーデータを入れる
     put_dummy_data
-
-    # 駅のランク付け
-    Station.find_each do |station|
-      station.update(rank: return_rank(station.passengers))
-    end
   end
 
   def self.put_dummy_data
