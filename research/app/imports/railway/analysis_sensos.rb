@@ -10,11 +10,11 @@ class Railway::AnalysisSensos
     puts "\n駅在留時間を計算します"
     set_between_time
 
-    puts "\n駅ごとの人数を集計します"
+    puts "\n駅ごとの人数を集計します\n終了後CSVに書き出します"
     aggregate_people
 
-    # puts "\nCSVに書き出しています"
-    # export_csv
+    puts "csvを解析します"
+    read_aggregate_csv
   end
 
   def self.read_between_time_data
@@ -406,6 +406,43 @@ class Railway::AnalysisSensos
         name = Station.find(set[:st_id]).name
         row << set.values.unshift(name)
       end
+    end
+  end
+
+  def self.read_aggregate_csv
+    CSV.read('app/imports/railway/data/aggregate_people.csv', headers: false).each_with_index do |row, i|
+      next if i == 0
+
+      station = Station.find(row[1])
+      row.shift(2)
+
+      list = row.map {|num| num.to_i}
+      station.update(peak_passengers: list.max, rank: return_rank(list.max))
+    end
+  end
+
+
+  def self.return_rank(num)
+    if num > 100000
+      10
+    elsif num > 80000
+      9
+    elsif num > 50000
+      8
+    elsif num > 30000
+      7
+    elsif num > 20000
+      6
+    elsif num > 15000
+      5
+    elsif num > 10000
+      4
+    elsif num > 5000
+      3
+    elsif num > 2500
+      2
+    else
+      1
     end
   end
 end
