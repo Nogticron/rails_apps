@@ -410,7 +410,7 @@ class Railway::AnalysisSensos
   end
 
   def self.read_aggregate_csv
-    CSV.read('app/imports/railway/data/aggregate_people.csv', headers: false).each_with_index do |row, i|
+    CSV.read('app/imports/railway/data/aggregate_people_15min.csv', headers: false).each_with_index do |row, i|
       next if i == 0
 
       station = Station.find(row[1])
@@ -418,6 +418,16 @@ class Railway::AnalysisSensos
 
       list = row.map {|num| num.to_i}
       station.update(peak_passengers: list.max, rank: return_rank(list.max))
+    end
+
+    CSV.read('app/imports/railway/data/aggregate_people_5min.csv', headers: false).each_with_index do |row, i|
+      next if i == 0
+
+      station = Station.find(row[1])
+      row.shift(2)
+
+      list = row.map {|num| num.to_i}
+      station.update(peak_passengers_5min: list.max)
     end
   end
 
