@@ -13,7 +13,7 @@ class Railway::AnalysisSensos
     puts "\n駅ごとの人数を集計します\n終了後CSVに書き出します"
     aggregate_people
 
-    # ピーク時間からランクを決定(15分区切りの時に決定)
+    # ピーク時間からランクを決定
     # puts "csvを解析します"
     # read_aggregate_csv
   end
@@ -515,14 +515,14 @@ class Railway::AnalysisSensos
   end
 
   def self.read_aggregate_csv
-    CSV.read('app/imports/railway/data/aggregate_people.csv', headers: false).each_with_index do |row, i|
+    CSV.read('app/imports/railway/data/aggregate_people_5min.csv', headers: false).each_with_index do |row, i|
       next if i == 0
 
       station = Station.find(row[1])
       row.shift(2)
 
       list = row.map {|num| num.to_i}
-      station.update(peak_passengers: list.max, rank: return_rank(list.max))
+      station.update(peak_passengers_5min: list.max, rank: return_rank(list.max))
     end
   end
 
