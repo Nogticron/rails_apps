@@ -4,6 +4,9 @@ class Railway::AnalysisSensos
   $data = []
 
   def self.start
+    puts '駅ランクをデフォルトセットします'
+    set_default_rank
+
     puts "駅間時間を読み込みます"
     read_between_time_data
 
@@ -280,7 +283,7 @@ class Railway::AnalysisSensos
         arrival_time = person.time_zone(person.am_arrival_time1)
         count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time1)
-        count_up(st_id, departure_time, magnification) if departure_time
+        count_up(st_id, departure_time, magnification) if departure_time && arrival_time != departure_time
       end
 
       st_id = person.st2_id
@@ -288,7 +291,7 @@ class Railway::AnalysisSensos
         arrival_time = person.time_zone(person.am_arrival_time2)
         count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time2)
-        count_up(st_id, departure_time, magnification) if departure_time
+        count_up(st_id, departure_time, magnification) if departure_time && arrival_time != departure_time
       end
 
       st_id = person.st3_id
@@ -296,7 +299,7 @@ class Railway::AnalysisSensos
         arrival_time = person.time_zone(person.am_arrival_time3)
         count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time3)
-        count_up(st_id, departure_time, magnification) if departure_time
+        count_up(st_id, departure_time, magnification) if departure_time && arrival_time != departure_time
       end
 
       st_id = person.st4_id
@@ -304,7 +307,7 @@ class Railway::AnalysisSensos
         arrival_time = person.time_zone(person.am_arrival_time4)
         count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time4)
-        count_up(st_id, departure_time, magnification) if departure_time
+        count_up(st_id, departure_time, magnification) if departure_time && arrival_time != departure_time
       end
 
       st_id = person.st5_id
@@ -312,7 +315,7 @@ class Railway::AnalysisSensos
         arrival_time = person.time_zone(person.am_arrival_time5)
         count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time5)
-        count_up(st_id, departure_time, magnification) if departure_time
+        count_up(st_id, departure_time, magnification) if departure_time && arrival_time != departure_time
       end
 
       st_id = person.st6_id
@@ -320,7 +323,7 @@ class Railway::AnalysisSensos
         arrival_time = person.time_zone(person.am_arrival_time6)
         count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time6)
-        count_up(st_id, departure_time, magnification) if departure_time
+        count_up(st_id, departure_time, magnification) if departure_time && arrival_time != departure_time
       end
 
       st_id = person.st7_id
@@ -328,7 +331,7 @@ class Railway::AnalysisSensos
         arrival_time = person.time_zone(person.am_arrival_time7)
         count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time7)
-        count_up(st_id, departure_time, magnification) if departure_time
+        count_up(st_id, departure_time, magnification) if departure_time && arrival_time != departure_time
       end
 
       st_id = person.st8_id
@@ -336,7 +339,7 @@ class Railway::AnalysisSensos
         arrival_time = person.time_zone(person.am_arrival_time8)
         count_up(st_id, arrival_time, magnification) if arrival_time
         departure_time = person.time_zone(person.am_departure_time8)
-        count_up(st_id, departure_time, magnification) if departure_time
+        count_up(st_id, departure_time, magnification) if departure_time && arrival_time != departure_time
       end
     end
 
@@ -522,7 +525,7 @@ class Railway::AnalysisSensos
       row.shift(2)
 
       list = row.map {|num| num.to_i}
-      station.update(peak_passengers_5min: list.max, rank: return_rank(list.max))
+      station.update(peak_passengers: list.max)
     end
 
     CSV.read('app/imports/railway/data/aggregate_people_5min.csv', headers: false).each_with_index do |row, i|
@@ -537,27 +540,31 @@ class Railway::AnalysisSensos
   end
 
 
-  def self.return_rank(num)
-    if num > 100000
-      10
-    elsif num > 80000
-      9
-    elsif num > 50000
-      8
-    elsif num > 30000
-      7
-    elsif num > 20000
-      6
-    elsif num > 15000
-      5
-    elsif num > 10000
-      4
-    elsif num > 5000
-      3
-    elsif num > 2500
-      2
-    else
-      1
+  def self.set_default_rank
+    Station.all.each do |station|
+      num = station.passengers.to_i
+
+      if num > 1000000
+        station.update(rank: 10)
+      elsif num > 600000
+        station.update(rank: 9)
+      elsif num > 400000
+        station.update(rank: 8)
+      elsif num > 300000
+        station.update(rank: 7)
+      elsif num > 200000
+        station.update(rank: 6)
+      elsif num > 100000
+        station.update(rank: 5)
+      elsif num > 30000
+        station.update(rank: 4)
+      elsif num > 10000
+        station.update(rank: 3)
+      elsif num > 5000
+        station.update(rank: 2)
+      else
+        station.update(rank: 1)
+      end
     end
   end
 end
