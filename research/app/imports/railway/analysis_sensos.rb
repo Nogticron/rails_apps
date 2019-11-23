@@ -4,8 +4,8 @@ class Railway::AnalysisSensos
   $data = []
 
   def self.start
-    puts '駅ランクをデフォルトセットします'
-    set_default_rank
+    # puts '駅ランクをデフォルトセットします'
+    # set_default_rank
 
     puts "駅間時間を読み込みます"
     read_between_time_data
@@ -17,8 +17,8 @@ class Railway::AnalysisSensos
     aggregate_people
 
     # ピーク時間からランクを決定
-    # puts "csvを解析します"
-    # read_aggregate_csv
+    puts "csvを解析します"
+    read_aggregate_csv
   end
 
   def self.read_between_time_data
@@ -501,7 +501,7 @@ class Railway::AnalysisSensos
   end
 
   def self.export_csv
-    CSV.open('app/imports/railway/data/aggregate_people.csv','w', headers: true) do |row|
+    CSV.open('app/imports/railway/data/aggregate_people_5min.csv','w', headers: true) do |row|
       row << ['name', 'st_id', 'bef0600',
               'af0600', 'af0605', 'af0610', 'af0615', 'af0620', 'af0625', 'af0630', 'af0635', 'af0640', 'af0645', 'af0650', 'af0655',
               'af0700', 'af0705', 'af0710', 'af0715', 'af0720', 'af0725', 'af0730', 'af0735', 'af0740', 'af0745', 'af0750', 'af0755',
