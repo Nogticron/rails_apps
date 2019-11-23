@@ -422,6 +422,16 @@ class Railway::AnalysisSensos
       list = row.map {|num| num.to_i}
       station.update(peak_passengers: list.max)
     end
+
+    CSV.read('app/imports/railway/data/aggregate_people_5min.csv', headers: false).each_with_index do |row, i|
+      next if i == 0
+
+      station = Station.find(row[1])
+      row.shift(2)
+
+      list = row.map {|num| num.to_i}
+      station.update(peak_passengers_5min: list.max)
+    end
   end
 
 
