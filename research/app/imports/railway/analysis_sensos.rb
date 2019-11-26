@@ -4,8 +4,8 @@ class Railway::AnalysisSensos
   $data = []
 
   def self.start
-    # puts '駅ランクをデフォルトセットします'
-    # set_default_rank
+    puts '駅ランクをデフォルトセットします'
+    set_default_rank
 
     puts "駅間時間を読み込みます"
     read_between_time_data
