@@ -17,8 +17,11 @@ class Railway::AnalysisSensos
     aggregate_people
 
     # ピーク時間からランクを決定
-    puts "csvを解析します"
+    puts "CSVを解析します"
     read_aggregate_csv
+
+    puts '駅ランクを再設定します'
+    reset_station_rank
   end
 
   def self.read_between_time_data
@@ -539,7 +542,6 @@ class Railway::AnalysisSensos
     end
   end
 
-
   def self.set_default_rank
     Station.all.each do |station|
       num = station.passengers.to_i
@@ -561,6 +563,52 @@ class Railway::AnalysisSensos
       elsif num > 10000
         station.update(rank: 3)
       elsif num > 5000
+        station.update(rank: 2)
+      else
+        station.update(rank: 1)
+      end
+    end
+  end
+
+  def self.reset_station_rank
+    Station.all.each do |station|
+      num = station.peak_passengers.to_i
+
+      if num > 90000
+        station.update(rank: 19)
+      elsif num > 80000
+        station.update(rank: 18)
+      elsif num > 60000
+        station.update(rank: 17)
+      elsif num > 50000
+        station.update(rank: 16)
+      elsif num > 40000
+        station.update(rank: 15)
+      elsif num > 30000
+        station.update(rank: 14)
+      elsif num > 20000
+        station.update(rank: 13)
+      elsif num > 15000
+        station.update(rank: 12)
+      elsif num > 10000
+        station.update(rank: 11)
+      elsif num > 8000
+        station.update(rank: 10)
+      elsif num > 6000
+        station.update(rank: 9)
+      elsif num > 5000
+        station.update(rank: 8)
+      elsif num > 3500
+        station.update(rank: 7)
+      elsif num > 2500
+        station.update(rank: 6)
+      elsif num > 1500
+        station.update(rank: 5)
+      elsif num > 800
+        station.update(rank: 4)
+      elsif num > 300
+        station.update(rank: 3)
+      elsif num > 100
         station.update(rank: 2)
       else
         station.update(rank: 1)
