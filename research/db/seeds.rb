@@ -8,7 +8,7 @@
 
 CreateAreaCity.create_area
 Railway::StationImport.get
-Weather::ImportWeatherData.get
+# Weather::ImportWeatherData.get
 ImportCityData.get
 Railway::ScrapeStationCity.get
 CreateAreaCity.create_area_city_relation
@@ -18,3 +18,4 @@ Railway::ReadSensos.start
 # 途中で止めたら　rails runner 'Railway::ReadSensos.set_ids'
 Railway::AnalysisSensos.start
 # rails runner 'Railway::AnalysisSensos.start'
+Railway::CalculateCsv.read_people_5min
