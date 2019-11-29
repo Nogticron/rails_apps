@@ -73,8 +73,8 @@ class Railway::CalculateCsv
       datum = datum.map {|num| num.to_i }
 
       new_data = []
-      if datum.sum < 1500
-        passengers_sum = station.passengers / 3.0
+      if datum.sum < 1500 && datum.sum > 0
+        passengers_sum = station.passengers / 3.5
 
         model.each do |percent|
           new_data << ( passengers_sum * (percent / 100.0) ).to_i
