@@ -61,7 +61,6 @@ class Railway::ScrapeStationCity
     when '秋津'
       '東村山市'
     else
-
       address
     end
   end
