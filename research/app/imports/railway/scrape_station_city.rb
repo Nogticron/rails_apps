@@ -58,7 +58,10 @@ class Railway::ScrapeStationCity
       '奥多摩町'
     when '西多摩郡瑞穂町'
       '瑞穂町'
+    when '秋津'
+      '東村山市'
     else
+
       address
     end
   end
