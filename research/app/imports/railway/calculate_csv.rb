@@ -1,16 +1,17 @@
 class Railway::CalculateCsv
-  $base_data = []
+  $base_data_5min = []
+  $base_data_15min = []
 
   def self.read_people_5min
     # 元のデータを取得しておく
     CSV.read('app/imports/railway/data/aggregate_people_5min.csv','r', headers: false).each do |row|
-      $base_data << row
+      $base_data_5min << row
     end
 
     # データが足りない駅に補完する
-    complement_data
+    complement_data_5min
     CSV.open('app/imports/railway/data/re_aggregate_people_5min.csv','w', headers: true) do |row|
-      $base_data.each do |datum|
+      $base_data_5min.each do |datum|
         row << datum
       end
     end
@@ -55,12 +56,66 @@ class Railway::CalculateCsv
     end
   end
 
-  def self.complement_data
-    $base_data.each_with_index do |datum, i|
+  def self.read_people_15min
+    # 元のデータを取得しておく
+    CSV.read('app/imports/railway/data/aggregate_people_15min.csv','r', headers: false).each do |row|
+      $base_data_15min << row
+    end
+
+    # データが足りない駅に補完する
+    complement_data_15min
+    CSV.open('app/imports/railway/data/re_aggregate_people_15min.csv','w', headers: true) do |row|
+      $base_data_15min.each do |datum|
+        row << datum
+      end
+    end
+
+    data = []
+    data << ['name', 'st_id', 'bef0600',
+              'af0600', 'af0615', 'af0630', 'af0645',
+              'af0700', 'af0715', 'af0730', 'af0745',
+              'af0800', 'af0815', 'af0830', 'af0845',
+              'af0900', 'af0915', 'af0930', 'af0945',
+              'af1000', 'af1015', 'af1030', 'af1045',
+              'af1100', 'af1115', 'af1130', 'af1145',
+              'af1200'
+            ]
+
+    CSV.read('app/imports/railway/data/re_aggregate_people_15min.csv','r', headers: false).each_with_index do |row, i|
+      next if i == 0
+
+      new_list = []
+      station = Station.find(row[1])
+      new_list << station.name
+      new_list << station.id
+      row.shift(2)
+
+      list = row.map {|num| num.to_i}
+
+      peak_passengers = list.max.to_f
+      peak_passengers = 1 if peak_passengers == 0
+
+      list.each do |li|
+        val = (li.to_f / peak_passengers) * 100
+        new_list << val.to_i
+      end
+
+      data << new_list
+    end
+
+    CSV.open('app/imports/railway/data/people_15min_percentage.csv','w') do |row|
+      data.each do |datum|
+        row << datum
+      end
+    end
+  end
+
+  def self.complement_data_5min
+    $base_data_5min.each_with_index do |datum, i|
       next if i == 0
 
       station = Station.find(datum[1].to_i)
-      model = model_area(station.city.area)
+      model = model_area_5min(station.city.area)
 
       sum = model.sum.to_f
       # パーセントに変換
@@ -78,14 +133,44 @@ class Railway::CalculateCsv
         end
 
         new_data = new_data.unshift(station.name, station.id)
-        $base_data[station.id] = new_data
+        $base_data_5min[station.id] = new_data
       else
-        $base_data[station.id] = $base_data[station.id].unshift(station.name, station.id)
+        $base_data_5min[station.id] = $base_data_5min[station.id].unshift(station.name, station.id)
       end
     end
   end
 
-  def self.model_area(area)
+  def self.complement_data_15min
+    $base_data_15min.each_with_index do |datum, i|
+      next if i == 0
+
+      station = Station.find(datum[1].to_i)
+      model = model_area_15min(station.city.area)
+
+      sum = model.sum.to_f
+      # パーセントに変換
+      model = model.map {|num| (num * 100 / sum).round(2) }
+
+      datum.shift(2)
+      datum = datum.map {|num| num.to_i }
+
+      new_data = []
+      if datum.sum < 10000 && datum.sum > 0
+        passengers_sum = station.passengers / 3.5
+
+        model.each do |percent|
+          new_data << ( passengers_sum * (percent / 100.0) ).to_i
+        end
+
+        new_data = new_data.unshift(station.name, station.id)
+        $base_data_15min[station.id] = new_data
+      else
+        $base_data_15min[station.id] = $base_data_15min[station.id].unshift(station.name, station.id)
+      end
+    end
+  end
+
+  def self.model_area_5min(area)
     case area.name
     when '東京' #大手町
       model = [6, 0, 0, 0, 0, 3, 2, 2, 2, 1, 2, 6, 7, 14, 10, 8, 14, 21, 36, 33,
@@ -116,6 +201,27 @@ class Railway::CalculateCsv
       model = [2,5,1,8,4,11,5,15,8,5,14,51,46,40,48,55,56,36,98,62,94,90,91,100,
         92,40,43,40,45,66,90,85,30,29,21,13,18,19,4,6,27,31,9,3,39,3,18,9,7,7,15,1,
         0,28,2,3,4,5,1,0,0,0,3,0,5,0,0,2,0,0,1,0,3,42]
+    end
+
+    model
+  end
+
+  def self.model_area_15min(area)
+    case area.name
+    when '東京' #大手町
+      model = [3,0,1,1,6,13,30,54,60,85,100,85,55,41,24,15,9,14,8,5,2,0,0,0,2,16]
+    when '江戸川' #新小岩
+      model = [4,1,1,24,38,26,59,79,100,93,66,34,29,19,8,14,28,3,2,4,2,1,0,0,1,9]
+    when '練馬' #練馬
+      model = [1,1,7,8,22,28,59,94,100,90,70,48,27,22,18,14,20,10,4,1,3,3,1,0,1,12]
+    when '羽田' #蒲田
+      model = [2,1,4,8,19,26,58,96,100,95,72,54,28,19,9,12,10,2,2,4,2,2,2,1,1,25]
+    when '世田谷' #二子玉川
+      model = [2,2,7,19,37,49,81,87,100,78,63,53,33,24,29,15,5,6,8,5,3,3,3,2,0,28]
+    when '府中' #国分寺
+      model = [2,2,12,19,16,56,79,77,65,100,91,38,21,16,11,7,5,16,3,2,5,5,6,0,3,15]
+    when '八王子' #八王子
+      model = [1,5,7,10,33,50,66,75,100,44,76,47,17,12,16,18,10,9,11,4,0,1,2,0,2,16]
     end
 
     model
