@@ -40,6 +40,7 @@ class Railway::CalculateCsv
 
       peak_passengers = list.max.to_f
       peak_passengers = 1 if peak_passengers == 0
+      new_list << peak_passengers.to_i
 
       list.each do |li|
         val = (li.to_f / peak_passengers) * 100
@@ -94,6 +95,7 @@ class Railway::CalculateCsv
 
       peak_passengers = list.max.to_f
       peak_passengers = 1 if peak_passengers == 0
+      new_list << peak_passengers.to_i
 
       list.each do |li|
         val = (li.to_f / peak_passengers) * 100
