@@ -17,7 +17,7 @@ class Railway::CalculateCsv
     end
 
     data = []
-    data << ['name', 'st_id', 'bef0600',
+    data << ['name', 'st_id','passengers', 'bef0600',
               'af0600', 'af0605', 'af0610', 'af0615', 'af0620', 'af0625', 'af0630', 'af0635', 'af0640', 'af0645', 'af0650', 'af0655',
               'af0700', 'af0705', 'af0710', 'af0715', 'af0720', 'af0725', 'af0730', 'af0735', 'af0740', 'af0745', 'af0750', 'af0755',
               'af0800', 'af0805', 'af0810', 'af0815', 'af0820', 'af0825', 'af0830', 'af0835', 'af0840', 'af0845', 'af0850', 'af0855',
