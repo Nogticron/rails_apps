@@ -434,7 +434,6 @@ class Railway::AnalysisSensos
     end
   end
 
-
   def self.set_default_rank
     Station.all.each do |station|
       next if station.rank != nil
