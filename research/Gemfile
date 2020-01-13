@@ -46,3 +46,7 @@ gem 'mechanize'
 gem 'csv'
 
 gem 'rb-readline'
+
+group :development do
+  gem 'rb-readline'
+end

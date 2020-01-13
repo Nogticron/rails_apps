@@ -1,9 +1,12 @@
 class Railway::AnalysisSensos
   @station_list = []
   @between_time = []
+  $file_name = nil
   $data = []
 
-  def self.start
+  def self.start(file_name = nil)
+    $file_name = file_name
+
     puts '駅ランクをデフォルトセットします'
     set_default_rank
 
@@ -400,7 +403,7 @@ class Railway::AnalysisSensos
   end
 
   def self.export_csv
-    CSV.open('app/imports/railway/data/aggregate_people_15min.csv','w', headers: true) do |row|
+    CSV.open("app/imports/railway/data/aggregate_people_15min_#{$file_name}.csv",'w', headers: true) do |row|
       row << ['name', 'st_id', 'bef0600', 'af0600', 'af0615', 'af0630', 'af0645', 'af0700', 'af0715',
                'af0730', 'af0745', 'af0800', 'af0815', 'af0830', 'af0845', 'af0900', 'af0915',
                'af0930', 'af0945', 'af1000', 'af1015', 'af1030', 'af1045', 'af1100', 'af1115',
