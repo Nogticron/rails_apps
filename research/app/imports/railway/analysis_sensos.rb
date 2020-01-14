@@ -439,8 +439,6 @@ class Railway::AnalysisSensos
 
   def self.set_default_rank
     Station.all.each do |station|
-      next if station.rank != nil
-
       num = station.passengers.to_i
 
       if num > 1000000
