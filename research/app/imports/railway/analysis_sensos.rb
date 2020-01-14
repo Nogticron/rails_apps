@@ -507,15 +507,11 @@ class Railway::AnalysisSensos
   end
 
   def self.export_csv
-    CSV.open('app/imports/railway/data/aggregate_people_5min.csv','w', headers: true) do |row|
-      row << ['name', 'st_id', 'bef0600',
-              'af0600', 'af0605', 'af0610', 'af0615', 'af0620', 'af0625', 'af0630', 'af0635', 'af0640', 'af0645', 'af0650', 'af0655',
-              'af0700', 'af0705', 'af0710', 'af0715', 'af0720', 'af0725', 'af0730', 'af0735', 'af0740', 'af0745', 'af0750', 'af0755',
-              'af0800', 'af0805', 'af0810', 'af0815', 'af0820', 'af0825', 'af0830', 'af0835', 'af0840', 'af0845', 'af0850', 'af0855',
-              'af0900', 'af0905', 'af0910', 'af0915', 'af0920', 'af0925', 'af0930', 'af0935', 'af0940', 'af0945', 'af0950', 'af0955',
-              'af1000', 'af1005', 'af1010', 'af1015', 'af1020', 'af1025', 'af1030', 'af1035', 'af1040', 'af1045', 'af1050', 'af1055',
-              'af1100', 'af1105', 'af1110', 'af1115', 'af1120', 'af1125', 'af1130', 'af1135', 'af1140', 'af1145', 'af1150', 'af1155',
-              'af1200']
+    CSV.open("app/imports/railway/data/aggregate_people_15min_#{$file_name}.csv",'w', headers: true) do |row|
+      row << ['name', 'st_id', 'bef0600', 'af0600', 'af0615', 'af0630', 'af0645', 'af0700', 'af0715',
+               'af0730', 'af0745', 'af0800', 'af0815', 'af0830', 'af0845', 'af0900', 'af0915',
+               'af0930', 'af0945', 'af1000', 'af1015', 'af1030', 'af1045', 'af1100', 'af1115',
+               'af1130', 'af1145', 'af1200']
       $data.each do |set|
         name = Station.find(set[:st_id]).name
         row << set.values.unshift(name)
