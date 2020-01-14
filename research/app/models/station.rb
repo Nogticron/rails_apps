@@ -5,19 +5,26 @@ class Station < ApplicationRecord
   belongs_to :city
 
   def transfer_time
+    mag = 1
+
+    if city.area.name == '八王子'
+      puts ' 八王子エリアなので遅延を発生させました'
+      mag = 3
+    end
+
     case rank
     when 10
-      300
+      300 * mag
     when 9
-      240
+      240 * mag
     when 7 || 8
-      180
+      180 * mag
     when 6 || 5 || 4
-      120
+      120 * mag
     when 3
-      80
+      80 * mag
     else
-      60
+      60 * mag
     end
   end
 end

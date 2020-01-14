@@ -1,9 +1,12 @@
 class Railway::AnalysisSensos
   @station_list = []
   @between_time = []
+  $file_name = nil
   $data = []
 
-  def self.start
+  def self.start(file_name = nil)
+    $file_name = file_name
+
     puts '駅ランクをデフォルトセットします'
     set_default_rank
 
@@ -544,8 +547,6 @@ class Railway::AnalysisSensos
 
   def self.set_default_rank
     Station.all.each do |station|
-      next if station.rank != nil
-
       num = station.passengers.to_i
 
       if num > 1000000
