@@ -12,7 +12,7 @@ class ImportCityData
 			city.day_population = row['昼間人口／総数（人）']
 			city.resident_population = row['常住人口／総数（人）']
 			city.day_night_ratio = row['昼夜間人口比率／総数（％）']
-			city.area = row['面積（キロ平方メートル）']
+			city.square_km = row['面積（キロ平方メートル）']
 			city.day_density = row['人口密度／昼間人口（人/キロ平方メートル）']
 			city.resident_density = row['人口密度／常住人口（人/キロ平方メートル）']
 			city.save!

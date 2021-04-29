@@ -10,7 +10,7 @@ CreateAreaCity.create_area
 Railway::StationImport.get
 # Weather::ImportWeatherData.get
 ImportCityData.get
-Railway::ScrapeStationCity.get
+Railway::LinkStationCity.get
 CreateAreaCity.create_area_city_relation
 Railway::ScrapeStationRank.get
 

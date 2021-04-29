@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_081137) do
     t.integer "day_population", null: false
     t.integer "resident_population", null: false
     t.float "day_night_ratio", null: false
-    t.float "area", null: false
+    t.float "square_km", null: false
     t.float "day_density", null: false
     t.float "resident_density", null: false
     t.boolean "tour_spot", default: false, null: false
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_081137) do
     t.string "name", null: false
     t.string "lon", null: false
     t.string "lat", null: false
+    t.string "address"
     t.integer "passengers", default: 0
     t.integer "peak_passengers"
     t.integer "rank"

@@ -7,7 +7,7 @@ class Railway::ScrapeStationRank
   ODAKYU_URL = 'https://www.odakyu.jp/company/railroad/users/'
   TOKYU_URL = 'https://www.tokyu.co.jp/railway/data/passengers/'
   TOBU_URL = 'http://www.tobu.co.jp/corporation/rail/station_info/'
-  KEISEI_URL = 'http://www.keisei.co.jp/keisei/tetudou/accessj/people_top.htm'
+  KEISEI_URL = 'http://www.keisei.co.jp/keisei/tetudou/accessj/people_top.html'
   TOKYO_MONO_URL = 'http://www.tokyo-monorail.co.jp/company/profile.html'
 
   @agent = Mechanize.new
@@ -315,10 +315,10 @@ class Railway::ScrapeStationRank
       next if i <= 1
 
       list = row.search('td')
-      name = row.at('th').inner_text.sub(%r{ヶ}, 'ケ').gsub(%r{[\s　]}, '')
+      name = row.at('td').inner_text.sub(%r{ヶ}, 'ケ').gsub(%r{[\s　]}, '')
       station = Station.find_by(name: name)
       if station
-        this_passengers = list[2].inner_text.sub(%r{,}, '').to_i
+        this_passengers = list[3].inner_text.sub(%r{,}, '').to_i
         sum = station.passengers + this_passengers
         station.update(passengers: sum)
       end
