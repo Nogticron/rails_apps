@@ -8,7 +8,7 @@ class CreateCities < ActiveRecord::Migration[5.2]
       t.integer :day_population, null: false
       t.integer :resident_population, null: false
       t.float :day_night_ratio, null: false
-      t.float :area, null: false
+      t.float :square_km, null: false
       t.float :day_density, null: false
       t.float :resident_density, null: false
       t.boolean :tour_spot, default: false, null: false
