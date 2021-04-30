@@ -19,8 +19,12 @@ class Railway::AnalysisSensos
     puts "\n駅ごとの人数を集計します\n終了後CSVに書き出します"
     aggregate_people
 
-    puts "csvを解析します"
+    # ピーク時間からランクを決定
+    puts "CSVを解析します"
     read_aggregate_csv
+
+    puts '駅ランクを再設定します'
+    reset_station_rank
   end
 
   def self.read_between_time_data
@@ -262,11 +266,15 @@ class Railway::AnalysisSensos
   def self.aggregate_people
     # データセットを初期化
     1.upto(650) do |i|
-      set = {st_id: i, bef0600: 0, af0600: 0, af0615: 0, af0630: 0, af0645: 0, af0700: 0, af0715: 0,
-              af0730: 0, af0745: 0, af0800: 0, af0815: 0, af0830: 0, af0845: 0, af0900: 0,
-               af0915: 0, af0930: 0, af0945: 0, af1000: 0, af1015: 0, af1030: 0, af1045: 0, af1100: 0,
-                af1115: 0, af1130: 0, af1145: 0, af1200: 0,}
-      $data << set
+      set = {st_id: i, bef0600: 0,
+              af0600: 0, af0605: 0, af0610: 0, af0615: 0, af0620: 0, af0625: 0, af0630: 0, af0635: 0, af0640: 0, af0645: 0, af0650: 0, af0655: 0,
+              af0700: 0, af0705: 0, af0710: 0, af0715: 0, af0720: 0, af0725: 0, af0730: 0, af0735: 0, af0740: 0, af0745: 0, af0750: 0, af0755: 0,
+              af0800: 0, af0805: 0, af0810: 0, af0815: 0, af0820: 0, af0825: 0, af0830: 0, af0835: 0, af0840: 0, af0845: 0, af0850: 0, af0855: 0,
+              af0900: 0, af0905: 0, af0910: 0, af0915: 0, af0920: 0, af0925: 0, af0930: 0, af0935: 0, af0940: 0, af0945: 0, af0950: 0, af0955: 0,
+              af1000: 0, af1005: 0, af1010: 0, af1015: 0, af1020: 0, af1025: 0, af1030: 0, af1035: 0, af1040: 0, af1045: 0, af1050: 0, af1055: 0,
+              af1100: 0, af1105: 0, af1110: 0, af1115: 0, af1120: 0, af1125: 0, af1130: 0, af1135: 0, af1140: 0, af1145: 0, af1150: 0, af1155: 0,
+              af1200: 0}
+              $data << set
     end
 
     size = Person.all.size
@@ -351,63 +359,163 @@ class Railway::AnalysisSensos
       $data[st_id - 1][:bef0600] += mag # magは拡大率
     when '0600'
       $data[st_id - 1][:af0600] += mag
+    when '0605'
+      $data[st_id - 1][:af0605] += mag
+    when '0610'
+      $data[st_id - 1][:af0610] += mag
     when '0615'
       $data[st_id - 1][:af0615] += mag
+    when '0620'
+      $data[st_id - 1][:af0620] += mag
+    when '0625'
+      $data[st_id - 1][:af0625] += mag
     when '0630'
       $data[st_id - 1][:af0630] += mag
+    when '0635'
+      $data[st_id - 1][:af0635] += mag
+    when '0640'
+      $data[st_id - 1][:af0640] += mag
     when '0645'
       $data[st_id - 1][:af0645] += mag
+    when '0650'
+      $data[st_id - 1][:af0650] += mag
+    when '0655'
+      $data[st_id - 1][:af0655] += mag
     when '0700'
       $data[st_id - 1][:af0700] += mag
+    when '0705'
+      $data[st_id - 1][:af0705] += mag
+    when '0710'
+      $data[st_id - 1][:af0710] += mag
     when '0715'
       $data[st_id - 1][:af0715] += mag
+    when '0720'
+      $data[st_id - 1][:af0720] += mag
+    when '0725'
+      $data[st_id - 1][:af0725] += mag
     when '0730'
       $data[st_id - 1][:af0730] += mag
+    when '0735'
+      $data[st_id - 1][:af0735] += mag
+    when '0740'
+      $data[st_id - 1][:af0740] += mag
     when '0745'
       $data[st_id - 1][:af0745] += mag
+    when '0750'
+      $data[st_id - 1][:af0750] += mag
+    when '0755'
+      $data[st_id - 1][:af0755] += mag
     when '0800'
       $data[st_id - 1][:af0800] += mag
+    when '0805'
+      $data[st_id - 1][:af0805] += mag
+    when '0810'
+      $data[st_id - 1][:af0810] += mag
     when '0815'
       $data[st_id - 1][:af0815] += mag
+    when '0820'
+      $data[st_id - 1][:af0820] += mag
+    when '0825'
+      $data[st_id - 1][:af0825] += mag
     when '0830'
       $data[st_id - 1][:af0830] += mag
+    when '0835'
+      $data[st_id - 1][:af0835] += mag
+    when '0840'
+      $data[st_id - 1][:af0840] += mag
     when '0845'
       $data[st_id - 1][:af0845] += mag
+    when '0850'
+      $data[st_id - 1][:af0850] += mag
+    when '0855'
+      $data[st_id - 1][:af0855] += mag
     when '0900'
       $data[st_id - 1][:af0900] += mag
+    when '0905'
+      $data[st_id - 1][:af0905] += mag
+    when '0910'
+      $data[st_id - 1][:af0910] += mag
     when '0915'
       $data[st_id - 1][:af0915] += mag
+    when '0920'
+      $data[st_id - 1][:af0920] += mag
+    when '0925'
+      $data[st_id - 1][:af0925] += mag
     when '0930'
       $data[st_id - 1][:af0930] += mag
+    when '0935'
+      $data[st_id - 1][:af0935] += mag
+    when '0940'
+      $data[st_id - 1][:af0940] += mag
     when '0945'
       $data[st_id - 1][:af0945] += mag
+    when '0950'
+      $data[st_id - 1][:af0950] += mag
+    when '0955'
+      $data[st_id - 1][:af0955] += mag
     when '1000'
       $data[st_id - 1][:af1000] += mag
+    when '1005'
+      $data[st_id - 1][:af1005] += mag
+    when '1010'
+      $data[st_id - 1][:af1010] += mag
     when '1015'
       $data[st_id - 1][:af1015] += mag
+    when '1020'
+      $data[st_id - 1][:af1020] += mag
+    when '1025'
+      $data[st_id - 1][:af1025] += mag
     when '1030'
       $data[st_id - 1][:af1030] += mag
+    when '1035'
+      $data[st_id - 1][:af1035] += mag
+    when '1040'
+      $data[st_id - 1][:af1040] += mag
     when '1045'
       $data[st_id - 1][:af1045] += mag
+    when '1050'
+      $data[st_id - 1][:af1050] += mag
+    when '1055'
+      $data[st_id - 1][:af1055] += mag
     when '1100'
       $data[st_id - 1][:af1100] += mag
+    when '1105'
+      $data[st_id - 1][:af1105] += mag
+    when '1110'
+      $data[st_id - 1][:af1110] += mag
     when '1115'
       $data[st_id - 1][:af1115] += mag
+    when '1120'
+      $data[st_id - 1][:af1120] += mag
+    when '1125'
+      $data[st_id - 1][:af1125] += mag
     when '1130'
       $data[st_id - 1][:af1130] += mag
+    when '1135'
+      $data[st_id - 1][:af1135] += mag
+    when '1140'
+      $data[st_id - 1][:af1140] += mag
     when '1145'
       $data[st_id - 1][:af1145] += mag
+    when '1150'
+      $data[st_id - 1][:af1150] += mag
+    when '1155'
+      $data[st_id - 1][:af1155] += mag
     when '1200'
       $data[st_id - 1][:af1200] += mag
     end
   end
 
   def self.export_csv
-    CSV.open("app/imports/railway/data/aggregate_people_15min_#{$file_name}.csv",'w', headers: true) do |row|
-      row << ['name', 'st_id', 'bef0600', 'af0600', 'af0615', 'af0630', 'af0645', 'af0700', 'af0715',
-               'af0730', 'af0745', 'af0800', 'af0815', 'af0830', 'af0845', 'af0900', 'af0915',
-               'af0930', 'af0945', 'af1000', 'af1015', 'af1030', 'af1045', 'af1100', 'af1115',
-               'af1130', 'af1145', 'af1200']
+    CSV.open("app/imports/railway/data/aggregate_people_5min_#{$file_name}.csv",'w', headers: true) do |row|
+      row << ['name', 'st_id', 'bef0600',
+              'af0600', 'af0605', 'af0610', 'af0615', 'af0620', 'af0625', 'af0630', 'af0635', 'af0640', 'af0645', 'af0650', 'af0655',
+              'af0700', 'af0705', 'af0710', 'af0715', 'af0720', 'af0725', 'af0730', 'af0735', 'af0740', 'af0745', 'af0750', 'af0755',
+              'af0800', 'af0805', 'af0810', 'af0815', 'af0820', 'af0825', 'af0830', 'af0835', 'af0840', 'af0845', 'af0850', 'af0855',
+              'af0900', 'af0905', 'af0910', 'af0915', 'af0920', 'af0925', 'af0930', 'af0935', 'af0940', 'af0945', 'af0950', 'af0955',
+              'af1000', 'af1005', 'af1010', 'af1015', 'af1020', 'af1025', 'af1030', 'af1035', 'af1040', 'af1045', 'af1050', 'af1055',
+              'af1100', 'af1105', 'af1110', 'af1115', 'af1120', 'af1125', 'af1130', 'af1135', 'af1140', 'af1145', 'af1150', 'af1155',
+              'af1200']
       $data.each do |set|
         name = Station.find(set[:st_id]).name
         row << set.values.unshift(name)
@@ -458,6 +566,52 @@ class Railway::AnalysisSensos
       elsif num > 10000
         station.update(rank: 3)
       elsif num > 5000
+        station.update(rank: 2)
+      else
+        station.update(rank: 1)
+      end
+    end
+  end
+
+  def self.reset_station_rank
+    Station.all.each do |station|
+      num = station.peak_passengers.to_i
+
+      if num > 90000
+        station.update(rank: 19)
+      elsif num > 80000
+        station.update(rank: 18)
+      elsif num > 60000
+        station.update(rank: 17)
+      elsif num > 50000
+        station.update(rank: 16)
+      elsif num > 40000
+        station.update(rank: 15)
+      elsif num > 30000
+        station.update(rank: 14)
+      elsif num > 20000
+        station.update(rank: 13)
+      elsif num > 15000
+        station.update(rank: 12)
+      elsif num > 10000
+        station.update(rank: 11)
+      elsif num > 8000
+        station.update(rank: 10)
+      elsif num > 6000
+        station.update(rank: 9)
+      elsif num > 5000
+        station.update(rank: 8)
+      elsif num > 3500
+        station.update(rank: 7)
+      elsif num > 2500
+        station.update(rank: 6)
+      elsif num > 1500
+        station.update(rank: 5)
+      elsif num > 800
+        station.update(rank: 4)
+      elsif num > 300
+        station.update(rank: 3)
+      elsif num > 100
         station.update(rank: 2)
       else
         station.update(rank: 1)

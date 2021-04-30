@@ -7,8 +7,8 @@ class Station < ApplicationRecord
   def transfer_time
     mag = 1
 
-    if city.area.name == '八王子'
-      puts ' 八王子エリアなので遅延を発生させました'
+    if city.area.name == ''
+      # puts ' 八王子エリア遅延を発生させました'
       mag = 3
     end
 

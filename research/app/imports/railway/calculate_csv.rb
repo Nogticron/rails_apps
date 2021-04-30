@@ -2,15 +2,15 @@ class Railway::CalculateCsv
   $base_data_5min = []
   $base_data_15min = []
 
-  def self.read_people_5min
+  def self.read_people_5min(area_name = nil)
     # 元のデータを取得しておく
-    CSV.read('app/imports/railway/data/aggregate_people_5min.csv','r', headers: false).each do |row|
+    CSV.read("app/imports/railway/data/5min/aggregate_people_5min_#{area_name}.csv", headers: false).each do |row|
       $base_data_5min << row
     end
 
     # データが足りない駅に補完する
     complement_data_5min
-    CSV.open('app/imports/railway/data/re_aggregate_people_5min.csv','w', headers: true) do |row|
+    CSV.open("app/imports/railway/data/complete_5min/re_aggregate_5min_#{area_name}.csv", 'w', headers: true) do |row|
       $base_data_5min.each do |datum|
         row << datum
       end
@@ -27,7 +27,7 @@ class Railway::CalculateCsv
               'af1200'
             ]
 
-    CSV.read('app/imports/railway/data/re_aggregate_people_5min.csv','r', headers: false).each_with_index do |row, i|
+    CSV.read("app/imports/railway/data/complete_5min/re_aggregate_5min_#{area_name}.csv", headers: false).each_with_index do |row, i|
       next if i == 0
 
       new_list = []
@@ -50,7 +50,7 @@ class Railway::CalculateCsv
       data << new_list
     end
 
-    CSV.open('app/imports/railway/data/people_5min_percentage.csv','w') do |row|
+    CSV.open("app/imports/railway/data/percentage_5min/5min_percentage_#{area_name}.csv", 'w') do |row|
       data.each do |datum|
         row << datum
       end
@@ -177,7 +177,7 @@ class Railway::CalculateCsv
     when '東京' #大手町
       model = [6, 0, 0, 0, 0, 3, 2, 2, 2, 1, 2, 6, 7, 14, 10, 8, 14, 21, 36, 33,
         31, 58, 43, 50, 53, 70, 66, 74, 76, 71, 100, 86, 63, 55, 48, 44, 40, 46, 30, 22,
-        19, 22, 15, 15, 11, 13, 11, 4, 9, 11, 16, 13, 7, 11, 3, 4, 4, 2, 4, 0,  
+        19, 22, 15, 15, 11, 13, 11, 4, 9, 11, 16, 13, 7, 11, 3, 4, 4, 2, 4, 0,
         0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 3, 2, 36]
     when '江戸川' #新小岩
       model = [9,3,0,0,1,0,2,10,21,32,46,22,34,15,31,37,21,71,59,77,53,76,86,81,
